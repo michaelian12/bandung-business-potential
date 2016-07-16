@@ -30,18 +30,15 @@
           	<h1 style="margin-left:42px;">Bandung Business Potential</h1>
           </div>
         </header>
-        <div class="profile-photo-container">
-          <img src="images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
-          <div class="profile-photo-overlay"></div>
-        </div>
 
         <div class="mobile-menu-icon">
             <i class="fa fa-bars"></i>
         </div>
+
         <nav class="templatemo-left-nav">
           <ul>
             <li><a href="index.html"><i class="fa fa-home fa-fw"></i>Home</a></li>
-            <li><a href="manage-business-data.html"><i class="fa fa-database fa-fw"></i>Business Data</a></li>
+            <li><a href="business.html"><i class="fa fa-database fa-fw"></i>Business</a></li>
             <li><a href="profile.html"class="active"><i class="fa fa-user fa-fw"></i>Profile</a></li>
             <li><a href="signup.html"><i class="fa fa-user-plus fa-fw"></i>Sign Up</a></li>
             <li><a href="login.html"><i class="fa fa-sign-in fa-fw"></i>Log In</a></li>
@@ -52,21 +49,12 @@
       <!-- Main content -->
       <div class="templatemo-content col-1 light-gray-bg">
         <div class="templatemo-top-nav-container" style="height:130px;">
-          <div class="row">
-            <!-- Search box -->
-            <form class="templatemo-search-form" role="search">
-              <div class="input-group">
-                  <button type="submit" class="fa fa-search"></button>
-                  <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
-              </div>
-            </form>
-          </div>
         </div>
 
         <div class="templatemo-content-container">
           <div class="templatemo-content-widget white-bg">
             <h2 class="margin-bottom-10">Edit Profile</h2><hr>
-            <form action="index.html" class="templatemo-login-form" method="post" enctype="multipart/form-data">
+            <form action="#" class="templatemo-login-form" method="post" enctype="multipart/form-data">
               <div class="row form-group">
                 <div class="col-lg-6 col-md-6 form-group">
                   <center><div class="media-left" style="padding: 0px 0px 10px 0px;">
@@ -74,8 +62,8 @@
                       <img class="media-object img-circle templatemo-img-bordered" src="images/person.jpg" alt="Sunset" style="width:200px; height:200px;">
                     </a>
                   </div></center>
-                  <label for="inputFirstName">Change Profile Picture</label>
-                  <input type="file" name="fileToUpload" id="fileToUpload" class="filestyle" data-buttonName="btn-primary" data-buttonBefore="true" data-icon="false">
+                  <label>Change Profile Picture</label>
+                  <input id="gambarProfil" type="file" class="filestyle" name="gambarProfil" data-buttonName="btn-primary" data-buttonBefore="true" data-icon="false">
                 </div>
                 <div class="col-lg-6 col-md-6 form-group">
                   <center><div class="media-left" style="padding: 0px 0px 10px 0px;">
@@ -83,44 +71,44 @@
                       <img src="images/ktp.jpg" alt="Bicycle" class="img-square img-thumbnail" style="width:300px; height:200px;">
                     </a>
                   </div></center>
-                  <label for="inputFirstName">Change Identity Card Image</label>
-                  <input type="file" name="fileToUpload" id="fileToUpload" class="filestyle" data-buttonName="btn-primary" data-buttonBefore="true" data-icon="false">
+                  <label>Change Identity Card Image</label>
+                  <input id="gambarKtp" type="file" class="filestyle" name="gambarKtp" data-buttonName="btn-primary" data-buttonBefore="true" data-icon="false">
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-lg-6 col-md-6 form-group">
-                  <label for="inputFirstName">Full Name</label>
-                  <input type="text" class="form-control" id="inputFirstName" placeholder="John Smith">
+                  <label>Full Name</label>
+                  <input type="text" class="form-control" name="nama" placeholder="John Smith">
                 </div>
                 <div class="col-lg-6 col-md-6 form-group">
-                  <label for="inputFirstName">Identity Card Number</label>
-                  <input type="text" class="form-control" id="inputFirstName" placeholder="3273120908950005">
+                  <label>Identity Card Number</label>
+                  <input type="text" class="form-control" name="noKtp" placeholder="3273120908950005">
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-lg-12 form-group">
-                  <label for="inputFirstName">Address</label>
-                  <input type="text" class="form-control" id="inputFirstName" placeholder="Jl. Kawaluyaan Indah XVII no. 24">
+                  <label>Address</label>
+                  <input type="text" class="form-control" name="alamat" placeholder="Jl. Kawaluyaan Indah XVII no. 24">
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-lg-6 col-md-6 form-group">
-                  <label for="inputEmail">Email</label>
-                  <input type="email" class="form-control" id="inputEmail" placeholder="michaelian12@gmail.com">
+                  <label>Email</label>
+                  <input type="email" class="form-control" name="email" placeholder="someone@email.com">
                 </div>
                 <div class="col-lg-6 col-md-6 form-group">
-                  <label for="inputCurrentPassword">Password</label>
-                  <input type="password" class="form-control" id="inputCurrentPassword" placeholder="*********************">
+                  <label>Password</label>
+                  <input type="password" class="form-control" name="password" placeholder="*********************">
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-lg-6 col-md-6 form-group">
-                  <label for="inputEmail">Birth Place</label>
-                  <input type="text" class="form-control" id="inputEmail" placeholder="Jakarta">
+                  <label>Birth Place</label>
+                  <input type="text" class="form-control" name="tempatLahir" placeholder="Bandung">
                 </div>
                 <div class="col-lg-6 col-md-6 form-group">
-                  <label for="inputCurrentPassword">Birth Date</label>
-                  <input type="date" class="form-control" id="inputCurrentPassword">
+                  <label>Birth Date</label>
+                  <input type="date" class="form-control" name="tglLahir">
                 </div>
               </div>
               <div class="form-group text-right">
