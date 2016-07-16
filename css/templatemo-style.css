@@ -155,31 +155,43 @@ footer { padding: 15px; }
 	color: white;
 }
 .form-control.highlight::-webkit-input-placeholder { /* WebKit browsers */
-    color:    #ccc;
+  color:    #ccc;
 }
 .form-control.highlight:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-   color:    #ccc;
-   opacity:  1;
+  color:    #ccc;
+  opacity:  1;
 }
 .form-control.highlight::-moz-placeholder { /* Mozilla Firefox 19+ */
-   color:    #ccc;
-   opacity:  1;
+  color:    #ccc;
+  opacity:  1;
 }
 .form-control.highlight:-ms-input-placeholder { /* Internet Explorer 10+ */
-   color:    #ccc;
+  color:    #ccc;
 }
 .templatemo-search-form .input-group { position: relative; }
 .fa-search {
-    height:32px;
-    width:32px;
-    border: none;
-    cursor: pointer;
-    color: #13895F;
-    background:transparent;
-    position:absolute;
-    top: 0;
+  height:32px;
+  width:32px;
+  border: none;
+  cursor: pointer;
+  color: #13895F;
+  background:transparent;
+  position:absolute;
+  top: 0;
 	left: 0;
 	z-index: 100;
+}
+input[type="button"] {
+    font-family: FontAwesome;
+}
+.fa-map-marker {
+	border: none;
+	cursor: pointer;
+	color: #e60000;
+	background:transparent;
+}
+.fa-map-marker:hover {
+	color: rgba(255, 0, 0, 0.7);
 }
 .mobile-menu-icon {
 	cursor:pointer;
