@@ -1,3 +1,8 @@
+<?php
+	session_start();
+  if (($_SESSION['alreadyLogged'] == true) && ($_SESSION['ktp'] != "")) {
+    include("libs/connection.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -36,12 +41,10 @@
         </div>
         <nav class="templatemo-left-nav">
           <ul>
-            <li><a href="index.html"><i class="fa fa-home fa-fw"></i>Home</a></li>
-            <li><a href="business.html"><i class="fa fa-database fa-fw"></i>Business</a></li>
+            <li><a href="index.php"><i class="fa fa-home fa-fw"></i>Home</a></li>
+            <li><a href="business.php"><i class="fa fa-database fa-fw"></i>Business</a></li>
             <li><a href="#"class="active"><i class="fa fa-user fa-fw"></i>Profile</a></li>
-            <li><a href="signup.html"><i class="fa fa-user-plus fa-fw"></i>Sign Up</a></li>
-            <li><a href="login.html"><i class="fa fa-sign-in fa-fw"></i>Log In</a></li>
-            <li><a href="logout.html"><i class="fa fa-sign-out fa-fw"></i>Log Out</a></li>
+            <li><a href="libs/logout.php"><i class="fa fa-sign-out fa-fw"></i>Log Out</a></li>
           </ul>
         </nav>
       </div>
@@ -55,47 +58,62 @@
             <div class="templatemo-content-widget col-1 white-bg">
               <i class="fa fa-times"></i>
               <h1 class="text-uppercase" style="float:left;">Profile</h1>
-              <a href="profile-edit.html"><button class="margin-right-15 templatemo-blue-button" style="float:right;">Edit Profile</button></a>
+              <a href="profile-edit.php"><button class="margin-right-15 templatemo-blue-button" style="float:right;">Edit Profile</button></a>
             </div>
           </div>
 
           <div class="templatemo-flex-row flex-content-row">
+            <?php
+              $ktp = $_SESSION['ktp'];
+
+              $link = dbConnect();
+              $sql = "select * from user where ktp = '$ktp'";
+            	$res = $link->query($sql);
+              if (mysqli_num_rows($res) == 1) {
+                $data = mysqli_fetch_array($res);
+            ?>
             <!-- first widget -->
             <div class="templatemo-content-widget white-bg col-2">
               <i class="fa fa-times"></i>
               <div class="media margin-bottom-30">
                 <div class="media-left padding-right-25">
                   <a href="#">
-                    <img class="media-object img-circle templatemo-img-bordered" src="images/person.jpg" alt="Sunset">
+                    <?php if ($data['foto_user'] != "") { ?>
+                    <img class="media-object img-circle templatemo-img-bordered" style="width: 150px; height: 150px;" src="bbp/<?php echo $data['foto_user']; ?>">
+                    <?php } else { ?>
+                    <img class="media-object img-circle templatemo-img-bordered" style="width: 150px; height: 150px;" src="images/avatar.png">
+                    <?php } ?>
                   </a>
                 </div>
                 <div class="media-body">
-                  <h2 class="media-heading text-uppercase blue-text">Michael Agustian</h2>
-                  <p><i class="fa fa-circle" style="color:green;padding-right:8px;"></i>Active</p>
+                  <h2 class="media-heading text-uppercase blue-text"><?php echo $data['nama']; ?></h2>
+                  <p>
+                    <?php if ($data['status'] == "aktif") { ?>
+                    <i class="fa fa-circle" style="color:green;padding-right:8px;"></i>Active
+                    <?php } else { ?>
+                    <i class="fa fa-circle" style="color:red;padding-right:8px;"></i>Deactive
+                    <?php } ?>
+                  </p>
                 </div>
               </div>
               <div class="table-responsive">
                 <table class="table">
                   <tbody>
                     <tr>
-                      <td>Password</td>
-                      <td>******</td>
-                    </tr>
-                    <tr>
                       <td>Address</td>
-                      <td>Jl. Kawaluyaan Indah XVII no. 24</td>
+                      <td><?php echo $data['alamat']; ?></td>
                     </tr>
                     <tr>
                       <td>Place of Birth</td>
-                      <td>Jakarta</td>
+                      <td><?php echo $data['tempat_lahir']; ?></td>
                     </tr>
                     <tr>
                       <td>Date of Birth</td>
-                      <td>9th August 1995</td>
+                      <td><?php echo date('d M Y', strtotime($data['tanggal_lahir']));?></td>
                     </tr>
                     <tr>
                       <td>Email</td>
-                      <td>michaelian12@gmail.com</td>
+                      <td><?php echo $data['email']; ?></td>
                     </tr>
                   </tbody>
                 </table>
@@ -105,9 +123,10 @@
             <div class="templatemo-content-widget white-bg col-1">
               <i class="fa fa-times"></i>
               <h2 class="text-uppercase">Identity Card</h2>
-              <h3 class="text-uppercase">3273120908950005</h3><hr>
-              <img src="images/ktp.jpg" alt="Bicycle" class="img-square img-thumbnail margin-bottom-30">
+              <h3 class="text-uppercase"><?php echo $data['ktp']; ?></h3><hr>
+              <img src="bbp/<?php echo $data['foto_ktp']; ?>" class="img-square img-thumbnail margin-bottom-30"  style="width:300px; height:200px;">
             </div>
+            <?php } ?>
           </div>
 
           <footer class="text-right">
@@ -133,3 +152,6 @@
     <script type="text/javascript" src="js/templatemo-script.js"></script>      <!-- Templatemo Script -->
   </body>
 </html>
+<?php } else {
+  header("Location: ../login.php");
+} ?>

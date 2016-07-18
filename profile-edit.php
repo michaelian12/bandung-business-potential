@@ -1,3 +1,8 @@
+<?php
+	session_start();
+  if (($_SESSION['alreadyLogged'] == true) && ($_SESSION['ktp'] != "")) {
+    include("libs/connection.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -37,12 +42,10 @@
 
         <nav class="templatemo-left-nav">
           <ul>
-            <li><a href="index.html"><i class="fa fa-home fa-fw"></i>Home</a></li>
-            <li><a href="business.html"><i class="fa fa-database fa-fw"></i>Business</a></li>
-            <li><a href="profile.html"class="active"><i class="fa fa-user fa-fw"></i>Profile</a></li>
-            <li><a href="signup.html"><i class="fa fa-user-plus fa-fw"></i>Sign Up</a></li>
-            <li><a href="login.html"><i class="fa fa-sign-in fa-fw"></i>Log In</a></li>
-            <li><a href="logout.html"><i class="fa fa-sign-out fa-fw"></i>Log Out</a></li>
+            <li><a href="index.php"><i class="fa fa-home fa-fw"></i>Home</a></li>
+            <li><a href="business.php"><i class="fa fa-database fa-fw"></i>Business</a></li>
+            <li><a href="profile.php"class="active"><i class="fa fa-user fa-fw"></i>Profile</a></li>
+            <li><a href="libs/logout.php"><i class="fa fa-sign-out fa-fw"></i>Log Out</a></li>
           </ul>
         </nav>
       </div>
@@ -54,12 +57,25 @@
         <div class="templatemo-content-container">
           <div class="templatemo-content-widget white-bg">
             <h2 class="margin-bottom-10">Edit Profile</h2><hr>
-            <form action="#" class="templatemo-login-form" method="post" enctype="multipart/form-data">
+            <?php
+              $ktp = $_SESSION['ktp'];
+
+              $link = dbConnect();
+              $sql = "select * from user where ktp = '$ktp'";
+              $res = $link->query($sql);
+              if (mysqli_num_rows($res) == 1) {
+                $data = mysqli_fetch_array($res);
+            ?>
+            <form action="libs/profile-edit.php" class="templatemo-login-form" method="post" enctype="multipart/form-data">
               <div class="row form-group">
                 <div class="col-lg-6 col-md-6 form-group">
                   <center><div class="media-left" style="padding: 0px 0px 10px 0px;">
                     <a href="#">
-                      <img class="media-object img-circle templatemo-img-bordered" src="images/person.jpg" alt="Sunset" style="width:200px; height:200px;">
+                      <?php if ($data['foto_user'] != "") { ?>
+                      <img class="media-object img-circle templatemo-img-bordered" style="width: 200px; height: 200px;" src="bbp/<?php echo $data['foto_user']; ?>">
+                      <?php } else { ?>
+                      <img class="media-object img-circle templatemo-img-bordered" style="width: 200px; height: 200px;" src="images/avatar.png">
+                      <?php } ?>
                     </a>
                   </div></center>
                   <label>Change Profile Picture</label>
@@ -68,7 +84,7 @@
                 <div class="col-lg-6 col-md-6 form-group">
                   <center><div class="media-left" style="padding: 0px 0px 10px 0px;">
                     <a href="#">
-                      <img src="images/ktp.jpg" alt="Bicycle" class="img-square img-thumbnail" style="width:300px; height:200px;">
+                      <img src="bbp/<?php echo $data['foto_ktp']; ?>" class="img-square img-thumbnail" style="width:300px; height:200px;">
                     </a>
                   </div></center>
                   <label>Change Identity Card Image</label>
@@ -78,37 +94,37 @@
               <div class="row form-group">
                 <div class="col-lg-6 col-md-6 form-group">
                   <label>Full Name</label>
-                  <input type="text" class="form-control" name="nama" placeholder="John Smith">
+                  <input type="text" class="form-control" name="nama" placeholder="John Smith" value="<?php echo $data['nama']; ?>">
                 </div>
                 <div class="col-lg-6 col-md-6 form-group">
                   <label>Identity Card Number</label>
-                  <input type="text" class="form-control" name="noKtp" placeholder="3273120908950005">
+                  <input type="text" class="form-control" name="noKtp" placeholder="3273120908950005" value="<?php echo $data['ktp']; ?>" disabled="true">
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-lg-12 form-group">
                   <label>Address</label>
-                  <input type="text" class="form-control" name="alamat" placeholder="Jl. Kawaluyaan Indah XVII no. 24">
+                  <input type="text" class="form-control" name="alamat" placeholder="Jl. Kawaluyaan Indah XVII no. 24" value="<?php echo $data['alamat']; ?>">
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-lg-6 col-md-6 form-group">
                   <label>Email</label>
-                  <input type="email" class="form-control" name="email" placeholder="someone@email.com">
+                  <input type="email" class="form-control" name="email" placeholder="someone@email.com" value="<?php echo $data['email']; ?>">
                 </div>
                 <div class="col-lg-6 col-md-6 form-group">
                   <label>Password</label>
-                  <input type="password" class="form-control" name="password" placeholder="*********************">
+                  <input type="password" class="form-control" name="password" placeholder="*********************" value="<?php echo decryptIt($data['password']); ?>">
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-lg-6 col-md-6 form-group">
                   <label>Birth Place</label>
-                  <input type="text" class="form-control" name="tempatLahir" placeholder="Bandung">
+                  <input type="text" class="form-control" name="tempatLahir" placeholder="Bandung" value="<?php echo $data['tempat_lahir']; ?>">
                 </div>
                 <div class="col-lg-6 col-md-6 form-group">
                   <label>Birth Date</label>
-                  <input type="date" class="form-control" name="tglLahir">
+                  <input type="date" class="form-control" name="tglLahir" value="<?php echo $data['tanggal_lahir']; ?>">
                 </div>
               </div>
               <div class="form-group text-right">
@@ -116,27 +132,21 @@
                 <button type="reset" class="templatemo-white-button">Reset</button>
               </div>
             </form>
+            <?php } ?>
           </div>
           <footer class="text-right">
-            <p>Copyright &copy; 2016 <a href="index.html">Bandung Business Potential</a></p>
+            <p>Copyright &copy; 2016 <a href="index.php">Bandung Business Potential</a></p>
           </footer>
         </div>
       </div>
     </div>
 
     <!-- JS -->
-    <script>
-      $(function(){
-        $("input[type='submit']").click(function(){
-            var $fileUpload = $("input[type='file']");
-            if (parseInt($fileUpload.get(0).files.length)>2){
-             alert("You can only upload a maximum of 2 files");
-            }
-        });
-      });​
-    </script>
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>      <!-- jQuery -->
     <script type="text/javascript" src="js/bootstrap-filestyle.min.js"></script>  <!-- http://markusslima.github.io/bootstrap-filestyle/ -->
     <script type="text/javascript" src="js/templatemo-script.js"></script>      <!-- Templatemo Script -->
   </body>
 </html>
+<?php } else {
+  header("Location: ../login.php");
+} ?>

@@ -1,3 +1,7 @@
+<?php
+	session_start();
+	include("libs/connection.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -40,11 +44,20 @@
         <nav class="templatemo-left-nav">
           <ul>
             <li><a href="#" class="active"><i class="fa fa-home fa-fw"></i>Home</a></li>
-            <li><a href="business.html"><i class="fa fa-database fa-fw"></i>Business</a></li>
-            <li><a href="profile.html"><i class="fa fa-user fa-fw"></i>Profile</a></li>
-            <li><a href="signup.html"><i class="fa fa-user-plus fa-fw"></i>Sign Up</a></li>
-            <li><a href="login.html"><i class="fa fa-sign-in fa-fw"></i>Log In</a></li>
-            <li><a href="logout.html"><i class="fa fa-sign-out fa-fw"></i>Log Out</a></li>
+            <?php
+              if (($_SESSION['alreadyLogged'] == true) && ($_SESSION['ktp'] != "")) {
+            ?>
+						<li><a href="business.php"><i class="fa fa-database fa-fw"></i>Business</a></li>
+            <li><a href="profile.php"><i class="fa fa-user fa-fw"></i>Profile</a></li>
+            <li><a href="libs/logout.php"><i class="fa fa-sign-out fa-fw"></i>Log Out</a></li>
+						<?php
+							} else {
+						?>
+						<li><a href="signup.php"><i class="fa fa-user-plus fa-fw"></i>Sign Up</a></li>
+		      	<li><a href="login.php"><i class="fa fa-sign-in fa-fw"></i>Log In</a></li>
+						<?php
+							}
+						?>
           </ul>
         </nav>
       </div>
@@ -71,30 +84,39 @@
                 <div class="media-body">
                   <h2 class="media-heading text-uppercase">Filter</h2><hr>
                   <h3 class="text-uppercase">Region</h3>
-                  <select class="form-control" style="margin-top:10px;">
-                    <option value="html">District</option>
+                  <select id="district" class="form-control" style="margin-top:10px;" onchange="updateVillage()">
+										<?php
+											$link = dbConnect();
+											$sql = "select * from kecamatan order by nama_kecamatan";
+											$res = $link->query($sql);
+											while ($row = mysqli_fetch_array($res)) {
+												echo "<option value=\"".$row['id_kecamatan']."\">".$row['nama_kecamatan']." </option>";
+											}
+											mysqli_close($link);
+										?>
                   </select><br>
-                  <select class="form-control">
-                    <option value="html">Village</option>
+                  <select id="village" class="form-control">
+										<?php
+											$link = dbConnect();
+											$sql = "select * from kelurahan order by nama_kelurahan";
+											$res = $link->query($sql);
+											while ($row = mysqli_fetch_array($res)) {
+												echo "<option value=\"".$row['id_kelurahan']."\">".$row['nama_kelurahan']." </option>";
+											}
+											mysqli_close($link);
+										?>
                   </select><br>
                   <h3 class="text-uppercase">Business Sector</h3>
                   <select class="form-control" style="margin-top:10px;">
-                    <option value="Periklanan">Periklanan</option>
-                    <option value="Arsitektur">Arsitektur</option>
-                    <option value="Pasar Barang Seni">Pasar Barang Seni</option>
-                    <option value="Kerajinan">Kerajinan</option>
-                    <option value="Desain">Desain</option>
-                    <option value="Fashion">Fashion</option>
-                    <option value="Video">Video</option>
-                    <option value="Film dan Fotografi">Film dan Fotografi</option>
-                    <option value="Permainan Interaktif">Permainan Interaktif</option>
-                    <option value="Musik">Musik</option>
-                    <option value="Seni Pertunjukan">Seni Pertunjukan</option>
-                    <option value="Penerbitan dan Percetakan">Penerbitan dan Percetakan</option>
-                    <option value="Layanan Komputer dan Piranti Lunak">Layanan Komputer dan Piranti Lunak</option>
-                    <option value="Televisi dan Radio">Televisi dan Radio</option>
-                    <option value="Riset dan Pengembangan">Riset dan Pengembangan</option>
-                    <option value="Kuliner">Kuliner</option>
+										<?php
+											$link = dbConnect();
+											$sql = "select * from sektor_usaha order by nama_sektor";
+											$res = $link->query($sql);
+											while ($row = mysqli_fetch_array($res)) {
+												echo "<option value=\"".$row['nama_sektor']."\">".$row['nama_sektor']." </option>";
+											}
+											mysqli_close($link);
+										?>
                   </select><br>
                   <input id="show-listings" type="button" class="templatemo-green-button" value="Show Listings">
                   <input id="hide-listings" type="button" class="templatemo-black-button" value="Hide Listings"><br>
@@ -109,9 +131,46 @@
 
           <div class="templatemo-flex-row flex-content-row">
             <!-- first widget -->
-            <div id="pano" class="templatemo-content-widget white-bg col-1 text-center" style="height:450px;">
+						<div class="templatemo-content-widget white-bg col-2">
+              <i class="fa fa-times"></i>
+              <div class="media margin-bottom-30">
+                <div class="media-body">
+                  <h2 class="media-heading text-uppercase blue-text">McDonald's</h2>
+                  <p>Jl. Jend. Gatot Subroto no. 160</p>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <td><div class="circle green-bg"></div></td>
+                      <td>Main Product</td>
+                      <td>Food & Drinks</td>
+                    </tr>
+                    <tr>
+                      <td><div class="circle pink-bg"></div></td>
+                      <td>Phone Number</td>
+                      <td>(022) 7313333</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div><br><br><hr>
+							<div class="media-left padding-right-25">
+								<a href="#">
+									<img class="media-object img-circle templatemo-img-bordered" src="images/person.jpg" alt="Sunset">
+								</a>
+							</div>
+							<div class="media-body">
+								<h2 class="media-heading text-uppercase blue-text">John Barnet</h2>
+								<p>Owner</p>
+							</div>
+            </div>
+
+						<!-- second widget -->
+						<div id="pano" class="templatemo-content-widget white-bg col-1 text-center" style="height:450px;">
               <div class="street-view"><p class="text-uppercase">Street view will appear once you choose a location</p></div>
             </div>
+
           </div> <!-- Second row ends -->
 
           <footer class="text-right">
@@ -122,8 +181,9 @@
     </div>
 
     <!-- JS -->
-    <script src="js/jquery-1.11.2.min.js"></script>      <!-- jQuery -->
-    <script src="js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
+		<script src="js/ajax.js"></script>																					<!-- AJAX -->
+    <script src="js/jquery-1.11.2.min.js"></script>      												<!-- jQuery -->
+    <script src="js/jquery-migrate-1.2.1.min.js"></script> 											<!--  jQuery Migrate Plugin -->
     <script type="text/javascript" src="js/templatemo-script.js"></script>      <!-- Templatemo Script -->
 
   </body>

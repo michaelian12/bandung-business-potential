@@ -61,6 +61,12 @@ function placeMarker(position) {
 
         // create info window
         setInfoWindow(marker);
+
+        // set value in form
+        document.getElementById('lat').value = marker.getPosition().lat();
+        document.getElementById('lng').value = marker.getPosition().lng();
+        var str = marker.title.split(',',1);
+        document.getElementById('address').value = str;
       } else {
         window.alert('No results found');
       }
@@ -81,16 +87,10 @@ function geocodeLatLng(geocoder, marker, position) {
         infowindow.open(map, marker);
 
         // set value in form
-        for (var i=0; i<results[0].address_components.length; i++) {
-          if (results[0].address_components[i].types[0] == "administrative_area_level_4") {
-            document.getElementById('village').value = results[0].address_components[i].long_name;
-          }
-          if (results[0].address_components[i].types[0] == "administrative_area_level_3") {
-            document.getElementById('district').value = results[0].address_components[i].long_name;
-          }
-        }
-
         document.getElementById('lat').value = marker.getPosition().lat();
+        document.getElementById('lng').value = marker.getPosition().lng();
+        var str = marker.title.split(',',1);
+        document.getElementById('address').value = str;
       } else {
         window.alert('No results found');
       }
@@ -135,16 +135,10 @@ function geocodeAddress() {
           setInfoWindow(marker);
 
           // set value in form
-          for (var i=0; i<results[0].address_components.length; i++) {
-            if (results[0].address_components[i].types[0] == "administrative_area_level_4") {
-              document.getElementById('village').value = results[0].address_components[i].long_name;
-            }
-            if (results[0].address_components[i].types[0] == "administrative_area_level_3") {
-              document.getElementById('district').value = results[0].address_components[i].long_name;
-            }
-          }
-
           document.getElementById('lat').value = marker.getPosition().lat();
+          document.getElementById('lng').value = marker.getPosition().lng();
+          var str = marker.title.split(',',1);
+          document.getElementById('address').value = str;
         } else {
           window.alert('No results found');
         }

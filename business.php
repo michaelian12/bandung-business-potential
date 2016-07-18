@@ -1,3 +1,8 @@
+<?php
+	session_start();
+  if (($_SESSION['alreadyLogged'] == true) && ($_SESSION['ktp'] != "")) {
+    include("libs/connection.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -37,12 +42,10 @@
 
         <nav class="templatemo-left-nav">
           <ul>
-            <li><a href="index.html"><i class="fa fa-home fa-fw"></i>Home</a></li>
+            <li><a href="index.php"><i class="fa fa-home fa-fw"></i>Home</a></li>
             <li><a href="#"class="active"><i class="fa fa-database fa-fw"></i>Business</a></li>
-            <li><a href="profile.html"><i class="fa fa-user fa-fw"></i>Profile</a></li>
-            <li><a href="signup.html"><i class="fa fa-user-plus fa-fw"></i>Sign Up</a></li>
-            <li><a href="login.html"><i class="fa fa-sign-in fa-fw"></i>Log In</a></li>
-            <li><a href="logout.html"><i class="fa fa-sign-out fa-fw"></i>Log Out</a></li>
+            <li><a href="profile.php"><i class="fa fa-user fa-fw"></i>Profile</a></li>
+            <li><a href="libs/logout.php"><i class="fa fa-sign-out fa-fw"></i>Log Out</a></li>
           </ul>
         </nav>
       </div>
@@ -65,7 +68,7 @@
             <div class="templatemo-content-widget col-1 white-bg">
               <i class="fa fa-times"></i>
               <h1 class="text-uppercase" style="float:left;">Business</h1>
-              <a href="business-add.html"><button class="margin-right-15 templatemo-blue-button" style="float:right;">Add Business</button></a>
+              <a href="business-add.php"><button class="margin-right-15 templatemo-blue-button" style="float:right;">Add Business</button></a>
             </div>
           </div>
 
@@ -85,36 +88,29 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <?php
+                    $link = dbConnect();
+                    $ktp = $_SESSION['ktp'];
+                    $sql = "select * from usaha where ktp = '$ktp'";
+                    $res = $link->query($sql);
+                    $i = 0;
+                    while ($row = mysqli_fetch_array($res)) {
+                      $i++;
+                  ?>
                   <tr>
-                    <td>1.</td>
-                    <td>McDonald's - Gatot Subroto</td>
-                    <td>Foods & Drinks</td>
-                    <td>Jl. Jend. Gatot Subroto No. 160</td>
-                    <td>(022) 7313333</td>
-                    <td><center><a href="" class="templatemo-link"><i class="fa fa-toggle-on fa-fw"></i></a></center></td>
-                    <td><center><a href="business-edit.html" class="templatemo-link"><i class="fa fa-pencil-square-o fa-fw"></i></a></center></td>
-                    <td><center><a href="" class="templatemo-link"><i class="fa fa-times-circle fa-fw"></i></a></center></td>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $row['nama_usaha']; ?></td>
+                    <td><?php echo $row['produk_utama']; ?></td>
+                    <td><?php echo $row['alamat']; ?></td>
+                    <td><?php echo $row['telepon']; ?></td>
+                    <td><center><a href="libs/business-status.php?id=<?php echo $row['id_usaha']; ?>&status=<?php echo $row['status']; ?>" class="templatemo-link"><i class="fa <?php if ($row['status'] == "Aktif") { echo "fa-toggle-on"; } else { echo "fa-toggle-off"; } ?> fa-fw"></i></a></center></td>
+                    <td><center><a href="business-edit.php?id=<?php echo $row['id_usaha']; ?>" class="templatemo-link"><i class="fa fa-pencil-square-o fa-fw"></i></a></center></td>
+                    <td><center><a href="libs/business-delete.php?id=<?php echo $row['id_usaha']; ?>" class="templatemo-link"><i class="fa fa-times-circle fa-fw"></i></a></center></td>
                   </tr>
-                  <tr>
-                    <td>2.</td>
-                    <td>Benz Autoshop</td>
-                    <td>Automotive Parts</td>
-                    <td>Jl. Jend. Gatot Subroto No. 160</td>
-                    <td>(022) 7313333</td>
-                    <td><center><a href="" class="templatemo-link"><i class="fa fa-toggle-off fa-fw"></i></a></center></td>
-                    <td><center><a href="business-edit.html" class="templatemo-link"><i class="fa fa-pencil-square-o fa-fw"></i></a></center></td>
-                    <td><center><a href="" class="templatemo-link"><i class="fa fa-times-circle fa-fw"></i></a></center></td>
-                  </tr>
-                  <tr>
-                    <td>3.</td>
-                    <td>Kingz Barbershop</td>
-                    <td>Barber Service</td>
-                    <td>Jl. Jend. Gatot Subroto No. 160</td>
-                    <td>(022) 7313333</td>
-                    <td><center><a href="" class="templatemo-link"><i class="fa fa-toggle-off fa-fw"></i></a></center></td>
-                    <td><center><a href="business-edit.html" class="templatemo-link"><i class="fa fa-pencil-square-o fa-fw"></i></a></center></td>
-                    <td><center><a href="" class="templatemo-link"><i class="fa fa-times-circle fa-fw"></i></a></center></td>
-                  </tr>
+                  <?php
+                    }
+                    mysqli_close($link);
+                  ?>
                 </tbody>
               </table>
             </div>
@@ -143,3 +139,6 @@
     <script type="text/javascript" src="js/templatemo-script.js"></script>      <!-- Templatemo Script -->
   </body>
 </html>
+<?php } else {
+  header("Location: ../login.php");
+} ?>

@@ -1,10 +1,15 @@
+<?php
+	session_start();
+  if (($_SESSION['alreadyLogged'] == true) && ($_SESSION['ktp'] != "")) {
+    include("libs/connection.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bandung Business Potential - Edit Business</title>
+    <title>Bandung Business Potential - Add Business</title>
     <meta name="description" content="">
     <meta name="author" content="templatemo">
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,700" rel="stylesheet" type="text/css">
@@ -41,12 +46,10 @@
 
         <nav class="templatemo-left-nav">
           <ul>
-            <li><a href="index.html"><i class="fa fa-home fa-fw"></i>Home</a></li>
-            <li><a href="business.html"class="active"><i class="fa fa-database fa-fw"></i>Business</a></li>
-            <li><a href="profile.html"><i class="fa fa-user fa-fw"></i>Profile</a></li>
-            <li><a href="signup.html"><i class="fa fa-user-plus fa-fw"></i>Sign Up</a></li>
-            <li><a href="login.html"><i class="fa fa-sign-in fa-fw"></i>Log In</a></li>
-            <li><a href="logout.html"><i class="fa fa-sign-out fa-fw"></i>Log Out</a></li>
+            <li><a href="index.php"><i class="fa fa-home fa-fw"></i>Home</a></li>
+            <li><a href="business.php"class="active"><i class="fa fa-database fa-fw"></i>Business</a></li>
+            <li><a href="profile.php"><i class="fa fa-user fa-fw"></i>Profile</a></li>
+            <li><a href="libs/logout.php"><i class="fa fa-sign-out fa-fw"></i>Log Out</a></li>
           </ul>
         </nav>
       </div>
@@ -69,8 +72,8 @@
             <!-- first widget -->
             <div class="templatemo-content-widget col-2 white-bg">
               <i class="fa fa-times"></i>
-              <h2 class="margin-bottom-10 text-uppercase">Edit Business</h2><hr>
-              <form action="#" class="templatemo-login-form" method="post" enctype="multipart/form-data">
+              <h2 class="margin-bottom-10 text-uppercase">Add Business</h2><hr>
+              <form action="libs/business-add.php" class="templatemo-login-form" method="post" enctype="multipart/form-data">
                 <div class="row form-group">
                   <div class="col-lg-12 form-group">
                     <label>Business Name</label>
@@ -87,30 +90,29 @@
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Business Scale</label>
                       <select class="form-control" name="skalaUsaha">
-                        <option value="mikro">Mikro</option>
-                        <option value="kecil">Kecil</option>
-                        <option value="menengah">Menengah</option>
+                        <?php
+    											$link = dbConnect();
+    											$sql = "select * from skala_usaha";
+    											$res = $link->query($sql);
+    											while ($row = mysqli_fetch_array($res)) {
+    												echo "<option value=\"".$row['id_skala']."\">".$row['nama_skala']." </option>";
+    											}
+    											mysqli_close($link);
+    										?>
                       </select>
                   </div>
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Business Sector</label>
                       <select class="form-control" name="sektorUsaha">
-                        <option value="Periklanan">Periklanan</option>
-                        <option value="Arsitektur">Arsitektur</option>
-                        <option value="Pasar Barang Seni">Pasar Barang Seni</option>
-                        <option value="Kerajinan">Kerajinan</option>
-                        <option value="Desain">Desain</option>
-                        <option value="Fashion">Fashion</option>
-                        <option value="Video">Video</option>
-                        <option value="Film dan Fotografi">Film dan Fotografi</option>
-                        <option value="Permainan Interaktif">Permainan Interaktif</option>
-                        <option value="Musik">Musik</option>
-                        <option value="Seni Pertunjukan">Seni Pertunjukan</option>
-                        <option value="Penerbitan dan Percetakan">Penerbitan dan Percetakan</option>
-                        <option value="Layanan Komputer dan Piranti Lunak">Layanan Komputer dan Piranti Lunak</option>
-                        <option value="Televisi dan Radio">Televisi dan Radio</option>
-                        <option value="Riset dan Pengembangan">Riset dan Pengembangan</option>
-                        <option value="Kuliner">Kuliner</option>
+                        <?php
+    											$link = dbConnect();
+    											$sql = "select * from sektor_usaha order by nama_sektor";
+    											$res = $link->query($sql);
+    											while ($row = mysqli_fetch_array($res)) {
+    												echo "<option value=\"".$row['id_sektor']."\">".$row['nama_sektor']." </option>";
+    											}
+    											mysqli_close($link);
+    										?>
                       </select>
                   </div>
                 </div>
@@ -129,25 +131,29 @@
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>District (Kecamatan)</label>
                       <select id="district" class="form-control" name="kecamatan">
-                        <option value="Andir">Andir</option>
-                        <option value="Antapani">Antapani</option>
-                        <option value="Arcamanik">Arcamanik</option>
-                        <option value="Astanaanyar">Astanaanyar</option>
-                        <option value="Babakanciparay">Babakanciparay</option>
-                        <option value="Bandung Kidul">Bandung Kidul</option>
-                        <option value="Buahbatu">Buahbatu</option>
+                        <?php
+    											$link = dbConnect();
+    											$sql = "select * from kecamatan order by nama_kecamatan";
+    											$res = $link->query($sql);
+    											while ($row = mysqli_fetch_array($res)) {
+    												echo "<option value=\"".$row['id_kecamatan']."\">".$row['nama_kecamatan']." </option>";
+    											}
+    											mysqli_close($link);
+    										?>
                       </select>
                   </div>
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Village (Kelurahan)</label>
                       <select id="village" class="form-control" name="kelurahan">
-                        <option value="Campaka">Campaka</option>
-                        <option value="Ciroyom">Ciroyom</option>
-                        <option value="Dunguscariang">Dunguscariang</option>
-                        <option value="Garuda">Garuda</option>
-                        <option value="Kebonjeruk">Kebonjeruk</option>
-                        <option value="Maleber">Maleber</option>
-                        <option value="Jatisari">Jatisari</option>
+                        <?php
+    											$link = dbConnect();
+    											$sql = "select * from kelurahan order by nama_kelurahan";
+    											$res = $link->query($sql);
+    											while ($row = mysqli_fetch_array($res)) {
+    												echo "<option value=\"".$row['id_kelurahan']."\">".$row['nama_kelurahan']." </option>";
+    											}
+    											mysqli_close($link);
+    										?>
                       </select>
                   </div>
                 </div>
@@ -171,14 +177,14 @@
                   <div class="col-lg-12 form-group">
                     <div>
                       <label>Business Status</label>
-                      <div class="templatemo-block margin-bottom-5">
-                        <input type="radio" name="statusUsaha" value="Actived" checked>
-                        <label class="font-weight-400"><span></span>Actived</label>
-                      </div>
-                      <div class="templatemo-block margin-bottom-5">
-                        <input type="radio" name="statusUsaha" value="Deactived">
-                        <label class="font-weight-400"><span></span>Deactived</label>
-                      </div>
+											<div class="templatemo-block margin-bottom-5">
+	                      <input type="radio" id="r1" name="statusUsaha" value="Aktif" checked>
+	                      <label for="r1" class="font-weight-400"><span></span>Actived</label>
+	                    </div>
+	                    <div class="templatemo-block margin-bottom-5">
+	                      <input type="radio" id="r2" name="statusUsaha" value="Deaktif">
+	                      <label for="r2" class="font-weight-400"><span></span>Deactived</label>
+	                    </div>
                     </div>
                   </div>
                 </div>
@@ -190,7 +196,7 @@
                   </div>
                 </div>
                 <div class="form-group text-right">
-                  <button type="submit" class="templatemo-blue-button">Save</button>
+                  <button type="submit" class="templatemo-blue-button">Add</button>
                   <button type="reset" class="templatemo-white-button">Reset</button>
                 </div>
               </form>
@@ -221,8 +227,11 @@
         });
       });​
     </script>
-    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>      <!-- jQuery -->
+    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>      	<!-- jQuery -->
     <script type="text/javascript" src="js/bootstrap-filestyle.min.js"></script>  <!-- http://markusslima.github.io/bootstrap-filestyle/ -->
-    <script type="text/javascript" src="js/templatemo-script.js"></script>      <!-- Templatemo Script -->
+    <script type="text/javascript" src="js/templatemo-script.js"></script>      	<!-- Templatemo Script -->
   </body>
 </html>
+<?php } else {
+  header("Location: ../login.php");
+} ?>

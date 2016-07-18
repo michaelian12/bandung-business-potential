@@ -1,5 +1,6 @@
 <?php
-	function db_connect(){
+	// database connection function
+	function dbConnect(){
 		$host = "localhost";
 		$user = "root";
 		$password = "";
