@@ -1,14 +1,24 @@
 <?php
-	header("Cache-Control: no-cache, no-store, must-validate");
 	include("connection.php");
 
-	$id_kecamatan = $_GET['id'];
+	if(isset($_POST["id"]) && !empty($_POST["id"])){
+	    //Get all state data
+			$db = dbConnect();
+	    $query = $db->query("SELECT * FROM kelurahan WHERE id_kecamatan = ".$_POST['id']." ORDER BY nama_kelurahan");
 
-	$link = dbConnect();
-	$sql = "select * from kelurahan where id_kecamatan = '$id_kecamatan' order by nama_kelurahan";
-	$res = $link->query($sql);
-	while ($data = mysqli_fetch_array($res)) {
-		echo "$data[id_kelurahan];$data[nama_kelurahan]";
+	    //Count total number of rows
+	    $rowCount = $query->num_rows;
+
+	    //Display states list
+	    if($rowCount > 0){
+	        echo '<option value="">Select village</option>';
+	        while($row = $query->fetch_assoc()){
+	            echo '<option value="'.$row['id_kelurahan'].'">'.$row['nama_kelurahan'].'</option>';
+	        }
+	    }else{
+	        echo '<option value="">Village not available</option>';
+	    }
 	}
-	mysqli_close($link);
+
+	
 ?>

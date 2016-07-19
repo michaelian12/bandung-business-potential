@@ -15,7 +15,7 @@
 		// check password
 		if ($data['password'] == "$password") {
 			// check account status
-			if ($data['status'] == "aktif") {
+			if ($data['status'] == "Aktif") {
 				session_start();
 
 				$_SESSION['ktp'] = $data['ktp'];

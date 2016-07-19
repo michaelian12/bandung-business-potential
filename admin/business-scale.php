@@ -1,3 +1,16 @@
+<?php
+	session_start();
+  if (($_SESSION['adminLogged'] == true) && ($_SESSION['nip'] != "")) {
+    include("../libs/connection.php");
+
+    $link = dbConnect();
+    $sql = "select count(ktp) as total from user where status = 'Deaktif'";
+    $res = $link->query($sql);
+    if (mysqli_num_rows($res) == 1) {
+      $data = mysqli_fetch_array($res);
+    }
+    mysqli_close($link);
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -37,12 +50,12 @@
 
         <nav class="templatemo-left-nav">
           <ul>
-            <li><a href="index.html"><i class="fa fa-users fa-fw"></i>Accounts<span class="badge">5</span></a></li>
-            <li><a href="region.html"><i class="fa fa-map-marker fa-fw" style="color: #e6e6e6;"></i>Region</a></li>
-            <li><a href="business.html"><i class="fa fa-database fa-fw"></i>Business</a></li>
+            <li><a href="index.php"><i class="fa fa-users fa-fw"></i>Accounts<span class="badge"><?php if ($data['total'] != 0) { echo $data['total']; } ?></span></a></li>
+            <li><a href="region.php"><i class="fa fa-map-marker fa-fw" style="color: #e6e6e6;"></i>Region</a></li>
+            <li><a href="business.php"><i class="fa fa-database fa-fw"></i>Business</a></li>
             <li><a href="#" class="active"><i class="fa fa-expand fa-fw"></i>Business Scale</a></li>
-            <li><a href="business-sector.html"><i class="fa fa-flag fa-fw"></i>Business Sector</a></li>
-            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i>Sign Out</a></li>
+            <li><a href="business-sector.php"><i class="fa fa-flag fa-fw"></i>Business Sector</a></li>
+            <li><a href="../libs/logout-admin.php"><i class="fa fa-sign-out fa-fw"></i>Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -66,13 +79,14 @@
               <div class="panel panel-default margin-10">
                 <div class="panel-heading"><h2 class="text-uppercase">Add Business Scale Form</h2></div>
                 <div class="panel-body">
-                  <form action="#" class="templatemo-login-form">
+                  <form action="../libs/business-scale-add.php" method="post" class="templatemo-login-form">
                     <div class="form-group">
                       <label>Scale</label>
-                      <input type="text" class="form-control" name="skala" placeholder="Scale">
+                      <input type="text" class="form-control" name="namaSkala" placeholder="Scale" required="true">
                     </div>
                     <div class="form-group">
                       <button type="submit" class="templatemo-blue-button">Add</button>
+                      <button type="reset" class="templatemo-white-button">Reset</button>
                     </div>
                   </form>
                 </div>
@@ -92,24 +106,24 @@
                       </tr>
                     </thead>
                     <tbody>
+                      <?php
+                        $link = dbConnect();
+                        $sql = "select * from skala_usaha";
+                        $res = $link->query($sql);
+                        $i = 0;
+                        while ($row = mysqli_fetch_array($res)) {
+                          $i++;
+                      ?>
                       <tr>
-                        <td>1.</td>
-                        <td>Mikro</td>
-                        <td><center><a href="business-scale-edit.html" class="templatemo-edit-btn">Edit</a></center></td>
-                        <td><center><a href="" class="templatemo-link"><i class="fa fa-remove fa-fw" style="color:red;"></i></a></center></td>
+                        <td><?php echo $i; ?></td>
+                        <td><?php echo $row['nama_skala']; ?></td>
+                        <td><center><a href="business-scale-edit.php?id=<?php echo $row['id_skala']; ?>" class="templatemo-edit-btn">Edit</a></center></td>
+                        <td><center><a href="../libs/business-scale-delete.php?id=<?php echo $row['id_skala']; ?>" class="templatemo-link"><i class="fa fa-remove fa-fw" style="color:red;"></i></a></center></td>
                       </tr>
-                      <tr>
-                        <td>2.</td>
-                        <td>Kecil</td>
-                        <td><center><a href="business-scale-edit.html" class="templatemo-edit-btn">Edit</a></center></td>
-                        <td><center><a href="" class="templatemo-link"><i class="fa fa-remove fa-fw" style="color:red;"></i></a></center></td>
-                      </tr>
-                      <tr>
-                        <td>3.</td>
-                        <td>Menengah</td>
-                        <td><center><a href="business-scale-edit.html" class="templatemo-edit-btn">Edit</a></center></td>
-                        <td><center><a href="" class="templatemo-link"><i class="fa fa-remove fa-fw" style="color:red;"></i></a></center></td>
-                      </tr>
+                      <?php
+                        }
+                        mysqli_close($link);
+                      ?>
                     </tbody>
                   </table>
                 </div>
@@ -129,3 +143,6 @@
     <script type="text/javascript" src="../js/templatemo-script.js"></script>      <!-- Templatemo Script -->
   </body>
 </html>
+<?php } else {
+  header("Location: ../admin/login.php");
+} ?>

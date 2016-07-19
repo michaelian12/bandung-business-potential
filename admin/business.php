@@ -1,3 +1,16 @@
+<?php
+	session_start();
+  if (($_SESSION['adminLogged'] == true) && ($_SESSION['nip'] != "")) {
+    include("../libs/connection.php");
+
+    $link = dbConnect();
+    $sql = "select count(ktp) as total from user where status = 'Deaktif'";
+    $res = $link->query($sql);
+    if (mysqli_num_rows($res) == 1) {
+      $data = mysqli_fetch_array($res);
+    }
+    mysqli_close($link);
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -37,12 +50,12 @@
 
         <nav class="templatemo-left-nav">
           <ul>
-            <li><a href="index.html"><i class="fa fa-users fa-fw"></i>Accounts<span class="badge">5</span></a></li>
-            <li><a href="region.html"><i class="fa fa-map-marker fa-fw" style="color: #e6e6e6;"></i>Region</a></li>
+            <li><a href="index.php"><i class="fa fa-users fa-fw"></i>Accounts<span class="badge"><?php if ($data['total'] != 0) { echo $data['total']; } ?></span></a></li>
+            <li><a href="region.php"><i class="fa fa-map-marker fa-fw" style="color: #e6e6e6;"></i>Region</a></li>
             <li><a href="#" class="active"><i class="fa fa-database fa-fw"></i>Business</a></li>
-            <li><a href="business-scale.html"><i class="fa fa-expand fa-fw"></i>Business Scale</a></li>
-            <li><a href="business-sector.html"><i class="fa fa-flag fa-fw"></i>Business Sector</a></li>
-            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i>Sign Out</a></li>
+            <li><a href="business-scale.php"><i class="fa fa-expand fa-fw"></i>Business Scale</a></li>
+            <li><a href="business-sector.php"><i class="fa fa-flag fa-fw"></i>Business Sector</a></li>
+            <li><a href="../libs/logout-admin.php"><i class="fa fa-sign-out fa-fw"></i>Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -65,7 +78,7 @@
             <div class="templatemo-content-widget col-1 white-bg">
               <i class="fa fa-times"></i>
               <h1 class="text-uppercase" style="float:left;">Business</h1>
-              <a href="business-add.html"><button class="margin-right-15 templatemo-blue-button" style="float:right;">Add Business</button></a>
+              <a href="business-add.php"><button class="margin-right-15 templatemo-blue-button" style="float:right;">Add Business</button></a>
             </div>
           </div>
 
@@ -85,36 +98,28 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <?php
+                    $link = dbConnect();
+                    $sql = "select * from usaha";
+                    $res = $link->query($sql);
+                    $i = 0;
+                    while ($row = mysqli_fetch_array($res)) {
+                      $i++;
+                  ?>
                   <tr>
-                    <td>1.</td>
-                    <td>McDonald's - Gatot Subroto</td>
-                    <td>Foods & Drinks</td>
-                    <td>Jl. Jend. Gatot Subroto No. 160</td>
-                    <td>(022) 7313333</td>
-                    <td><center><a href="" class="templatemo-link"><i class="fa fa-toggle-on fa-fw"></i></a></center></td>
-                    <td><center><a href="business-edit.html" class="templatemo-link"><i class="fa fa-pencil-square-o fa-fw"></i></a></center></td>
-                    <td><center><a href="" class="templatemo-link"><i class="fa fa-times-circle fa-fw"></i></a></center></td>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $row['nama_usaha']; ?></td>
+                    <td><?php echo $row['produk_utama']; ?></td>
+                    <td><?php echo $row['alamat']; ?></td>
+                    <td><?php echo $row['telepon']; ?></td>
+                    <td><center><a href="../libs/business-status.php?id=<?php echo $row['id_usaha']; ?>&status=<?php echo $row['status']; ?>" class="templatemo-link"><i class="fa <?php if ($row['status'] == "Aktif") { echo "fa-toggle-on"; } else { echo "fa-toggle-off"; } ?> fa-fw"></i></a></center></td>
+                    <td><center><a href="business-edit.php?id=<?php echo $row['id_usaha']; ?>" class="templatemo-link"><i class="fa fa-pencil-square-o fa-fw"></i></a></center></td>
+                    <td><center><a href="../libs/business-delete.php?id=<?php echo $row['id_usaha']; ?>" class="templatemo-link"><i class="fa fa-times-circle fa-fw"></i></a></center></td>
                   </tr>
-                  <tr>
-                    <td>2.</td>
-                    <td>Benz Autoshop</td>
-                    <td>Automotive Parts</td>
-                    <td>Jl. Jend. Gatot Subroto No. 160</td>
-                    <td>(022) 7313333</td>
-                    <td><center><a href="" class="templatemo-link"><i class="fa fa-toggle-off fa-fw"></i></a></center></td>
-                    <td><center><a href="business-edit.html" class="templatemo-link"><i class="fa fa-pencil-square-o fa-fw"></i></a></center></td>
-                    <td><center><a href="" class="templatemo-link"><i class="fa fa-times-circle fa-fw"></i></a></center></td>
-                  </tr>
-                  <tr>
-                    <td>3.</td>
-                    <td>Kingz Barbershop</td>
-                    <td>Barber Service</td>
-                    <td>Jl. Jend. Gatot Subroto No. 160</td>
-                    <td>(022) 7313333</td>
-                    <td><center><a href="" class="templatemo-link"><i class="fa fa-toggle-off fa-fw"></i></a></center></td>
-                    <td><center><a href="business-edit.html" class="templatemo-link"><i class="fa fa-pencil-square-o fa-fw"></i></a></center></td>
-                    <td><center><a href="" class="templatemo-link"><i class="fa fa-times-circle fa-fw"></i></a></center></td>
-                  </tr>
+                  <?php
+                    }
+                    mysqli_close($link);
+                  ?>
                 </tbody>
               </table>
             </div>
@@ -143,3 +148,6 @@
     <script type="text/javascript" src="../js/templatemo-script.js"></script>      <!-- Templatemo Script -->
   </body>
 </html>
+<?php } else {
+  header("Location: ../admin/login.php");
+} ?>

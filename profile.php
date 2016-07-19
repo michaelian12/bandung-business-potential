@@ -124,7 +124,7 @@
               <i class="fa fa-times"></i>
               <h2 class="text-uppercase">Identity Card</h2>
               <h3 class="text-uppercase"><?php echo $data['ktp']; ?></h3><hr>
-              <img src="bbp/<?php echo $data['foto_ktp']; ?>" class="img-square img-thumbnail margin-bottom-30"  style="width:300px; height:200px;">
+              <img src="bbp/<?php echo $data['foto_ktp']; ?>" class="img-square img-thumbnail margin-bottom-30" style="width:300px; height:200px;">
             </div>
             <?php } ?>
           </div>

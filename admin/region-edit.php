@@ -1,3 +1,17 @@
+<?php
+	session_start();
+  if (($_SESSION['adminLogged'] == true) && ($_SESSION['nip'] != "")) {
+    include("../libs/connection.php");
+  	$id_edit = $_GET["id"];
+
+    $link = dbConnect();
+    $sql = "select count(ktp) as total from user where status = 'Deaktif'";
+    $res = $link->query($sql);
+    if (mysqli_num_rows($res) == 1) {
+      $data = mysqli_fetch_array($res);
+    }
+    mysqli_close($link);
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -37,12 +51,12 @@
 
         <nav class="templatemo-left-nav">
           <ul>
-            <li><a href="index.html"><i class="fa fa-users fa-fw"></i>Accounts<span class="badge">5</span></a></li>
-            <li><a href="region.html" class="active"><i class="fa fa-map-marker fa-fw" style="color: #e6e6e6;"></i>Region</a></li>
-            <li><a href="business.html"><i class="fa fa-database fa-fw"></i>Business</a></li>
-            <li><a href="business-scale.html"><i class="fa fa-expand fa-fw"></i>Business Scale</a></li>
-            <li><a href="business-sector.html"><i class="fa fa-flag fa-fw"></i>Business Sector</a></li>
-            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i>Sign Out</a></li>
+            <li><a href="index.php"><i class="fa fa-users fa-fw"></i>Accounts<span class="badge"><?php if ($data['total'] != 0) { echo $data['total']; } ?></span></a></li>
+            <li><a href="region.php" class="active"><i class="fa fa-map-marker fa-fw" style="color: #e6e6e6;"></i>Region</a></li>
+            <li><a href="business.php"><i class="fa fa-database fa-fw"></i>Business</a></li>
+            <li><a href="business-scale.php"><i class="fa fa-expand fa-fw"></i>Business Scale</a></li>
+            <li><a href="business-sector.php"><i class="fa fa-flag fa-fw"></i>Business Sector</a></li>
+            <li><a href="../libs/logout-admin.php"><i class="fa fa-sign-out fa-fw"></i>Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -73,16 +87,27 @@
                   <div class="panel panel-default margin-10 col-1">
                     <div class="panel-heading"><h2 class="text-uppercase">Edit District Form</h2></div>
                     <div class="panel-body">
-                      <form action="#" class="templatemo-login-form" method="post">
+                      <?php
+                        $link = dbConnect();
+                        $sql = "select * from kecamatan where id_kecamatan = '$id_edit'";
+                        $res = $link->query($sql);
+                        if (mysqli_num_rows($res) == 1) {
+                          $data = mysqli_fetch_array($res);
+                      ?>
+                      <form action="../libs/region-edit-district.php?id=<?php echo $id_edit; ?>" class="templatemo-login-form" method="post">
                         <div class="form-group">
                           <label>District Name</label>
-                          <input type="text" class="form-control" name="namaKecamatan" placeholder="District Name">
+                          <input type="text" class="form-control" name="namaKecamatan" placeholder="District Name" value="<?php echo $data['nama_kecamatan']; ?>" required="true">
                         </div>
                         <div class="form-group">
                           <button type="submit" class="templatemo-blue-button">Save</button>
                           <button type="reset" class="templatemo-white-button">Reset</button>
                         </div>
                       </form>
+                      <?php
+                        }
+                        mysqli_close($link);
+                      ?>
                     </div>
                   </div>
                 </div>
@@ -93,20 +118,48 @@
                   <div class="panel panel-default margin-10 col-1">
                     <div class="panel-heading"><h2 class="text-uppercase">Edit Village Form</h2></div>
                     <div class="panel-body">
-                      <form action="index.html" class="templatemo-login-form">
+                      <?php
+                        $link = dbConnect();
+                        $sql = "select * from kelurahan where id_kelurahan = '$id_edit'";
+                        $res = $link->query($sql);
+                        if (mysqli_num_rows($res) == 1) {
+                          $data = mysqli_fetch_array($res);
+                      ?>
+                      <form action="../libs/region-edit-village.php?id=<?php echo $id_edit; ?>" method="post" class="templatemo-login-form">
+                        <div class="form-group">
+                          <label>District Name</label>
+                          <select id="district" name="idKecamatan" class="form-control" style="margin-top:10px;" required="true">
+                          <?php
+                            $link = dbConnect();
+                            $sqlDis = "select * from kecamatan order by nama_kecamatan";
+                            $resDis = $link->query($sqlDis);
+                            while ($rowDis = mysqli_fetch_array($resDis)) {
+                              if ($rowDis['id_kecamatan'] == $data['id_kecamatan']) {
+      													echo "<option value=\"".$rowDis['id_kecamatan']."\" selected>".$rowDis['nama_kecamatan']." </option>";
+  														} else {
+  															echo "<option value=\"".$rowDis['id_kecamatan']."\">".$rowDis['nama_kecamatan']." </option>";
+  														}
+                            }
+                          ?>
+                          </select>
+                        </div>
                         <div class="form-group">
                           <label>Village Name</label>
-                          <input type="text" class="form-control" name="namaKelurahan" placeholder="Village Name">
+                          <input type="text" class="form-control" name="namaKelurahan" placeholder="Village Name" value="<?php echo $data['nama_kelurahan']; ?>" required="true">
                         </div>
                         <div class="form-group">
                           <label>Postal Code</label>
-                          <input type="text" class="form-control" name="kodePos" placeholder="Postal Code">
+                          <input type="text" class="form-control" name="kodePos" placeholder="Postal Code" value="<?php echo $data['kode_pos']; ?>" required="true">
                         </div>
                         <div class="form-group">
                           <button type="submit" class="templatemo-blue-button">Save</button>
                           <button type="reset" class="templatemo-white-button">Reset</button>
                         </div>
                       </form>
+                      <?php
+                        }
+                        mysqli_close($link);
+                      ?>
                     </div>
                   </div>
                 </div>
@@ -139,3 +192,6 @@
     </script>
   </body>
 </html>
+<?php } else {
+  header("Location: ../admin/login.php");
+} ?>

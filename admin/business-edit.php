@@ -1,10 +1,23 @@
+<?php
+	session_start();
+  if (($_SESSION['adminLogged'] == true) && ($_SESSION['nip'] != "")) {
+    include("../libs/connection.php");
+
+    $link = dbConnect();
+    $sql = "select count(ktp) as total from user where status = 'Deaktif'";
+    $res = $link->query($sql);
+    if (mysqli_num_rows($res) == 1) {
+      $data = mysqli_fetch_array($res);
+    }
+    mysqli_close($link);
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bandung Business Potential - Add Business</title>
+    <title>Bandung Business Potential - Edit Business</title>
     <meta name="description" content="">
     <meta name="author" content="templatemo">
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,700" rel="stylesheet" type="text/css">
@@ -41,12 +54,12 @@
 
         <nav class="templatemo-left-nav">
           <ul>
-            <li><a href="index.html"><i class="fa fa-users fa-fw"></i>Accounts<span class="badge">5</span></a></li>
-            <li><a href="region.html"><i class="fa fa-map-marker fa-fw" style="color: #e6e6e6;"></i>Region</a></li>
-            <li><a href="business.html" class="active"><i class="fa fa-database fa-fw"></i>Business</a></li>
-            <li><a href="business-scale.html"><i class="fa fa-expand fa-fw"></i>Business Scale</a></li>
-            <li><a href="business-sector.html"><i class="fa fa-flag fa-fw"></i>Business Sector</a></li>
-            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i>Sign Out</a></li>
+            <li><a href="index.php"><i class="fa fa-users fa-fw"></i>Accounts<span class="badge"><?php if ($data['total'] != 0) { echo $data['total']; } ?></span></a></li>
+            <li><a href="region.php"><i class="fa fa-map-marker fa-fw" style="color: #e6e6e6;"></i>Region</a></li>
+            <li><a href="business.php" class="active"><i class="fa fa-database fa-fw"></i>Business</a></li>
+            <li><a href="business-scale.php"><i class="fa fa-expand fa-fw"></i>Business Scale</a></li>
+            <li><a href="business-sector.php"><i class="fa fa-flag fa-fw"></i>Business Sector</a></li>
+            <li><a href="../libs/logout-admin.php"><i class="fa fa-sign-out fa-fw"></i>Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -69,48 +82,59 @@
             <!-- first widget -->
             <div class="templatemo-content-widget col-2 white-bg">
               <i class="fa fa-times"></i>
-              <h2 class="margin-bottom-10 text-uppercase">Add Business</h2><hr>
-              <form action="#" class="templatemo-login-form" method="post" enctype="multipart/form-data">
+              <h2 class="margin-bottom-10 text-uppercase">Edit Business</h2><hr>
+              <?php
+                $link = dbConnect();
+                $id_usaha = $_GET['id'];
+                $sql = "select * from usaha where id_usaha = '$id_usaha'";
+                $res = $link->query($sql);
+                if (mysqli_num_rows($res) == 1) {
+                  $data = mysqli_fetch_array($res);
+              ?>
+              <form action="../libs/business-edit.php?id=<?php echo $id_usaha; ?>" class="templatemo-login-form" method="post" enctype="multipart/form-data">
                 <div class="row form-group">
                   <div class="col-lg-12 form-group">
                     <label>Business Name</label>
-                    <input type="text" class="form-control" name="namaUsaha" placeholder="McDonald's">
+                    <input type="text" class="form-control" name="namaUsaha" placeholder="McDonald's" value="<?php echo $data['nama_usaha']; ?>">
                   </div>
                 </div>
                 <div class="row form-group">
                   <div class="col-lg-12 form-group">
                     <label>Main Product</label>
-                    <input type="text" class="form-control" name="produkUtama" placeholder="Foods & Drinks">
+                    <input type="text" class="form-control" name="produkUtama" placeholder="Foods & Drinks" value="<?php echo $data['produk_utama']; ?>">
                   </div>
                 </div>
                 <div class="row form-group">
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Business Scale</label>
                       <select class="form-control" name="skalaUsaha">
-                        <option value="mikro">Mikro</option>
-                        <option value="kecil">Kecil</option>
-                        <option value="menengah">Menengah</option>
+                        <?php
+    											$sqlScale = "select * from skala_usaha";
+    											$resScale = $link->query($sqlScale);
+    											while ($rowScale = mysqli_fetch_array($resScale)) {
+														if ($rowScale['id_skala'] == $data['id_skala']) {
+    													echo "<option value=\"".$rowScale['id_skala']."\" selected>".$rowScale['nama_skala']." </option>";
+														} else {
+															echo "<option value=\"".$rowScale['id_skala']."\">".$rowScale['nama_skala']." </option>";
+														}
+    											}
+    										?>
                       </select>
                   </div>
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Business Sector</label>
                       <select class="form-control" name="sektorUsaha">
-                        <option value="Periklanan">Periklanan</option>
-                        <option value="Arsitektur">Arsitektur</option>
-                        <option value="Pasar Barang Seni">Pasar Barang Seni</option>
-                        <option value="Kerajinan">Kerajinan</option>
-                        <option value="Desain">Desain</option>
-                        <option value="Fashion">Fashion</option>
-                        <option value="Video">Video</option>
-                        <option value="Film dan Fotografi">Film dan Fotografi</option>
-                        <option value="Permainan Interaktif">Permainan Interaktif</option>
-                        <option value="Musik">Musik</option>
-                        <option value="Seni Pertunjukan">Seni Pertunjukan</option>
-                        <option value="Penerbitan dan Percetakan">Penerbitan dan Percetakan</option>
-                        <option value="Layanan Komputer dan Piranti Lunak">Layanan Komputer dan Piranti Lunak</option>
-                        <option value="Televisi dan Radio">Televisi dan Radio</option>
-                        <option value="Riset dan Pengembangan">Riset dan Pengembangan</option>
-                        <option value="Kuliner">Kuliner</option>
+                        <?php
+    											$sqlSector = "select * from sektor_usaha order by nama_sektor";
+    											$resSector = $link->query($sqlSector);
+    											while ($rowSector = mysqli_fetch_array($resSector)) {
+														if ($rowSector['id_sektor'] == $data['id_sektor']) {
+															echo "<option value=\"".$rowSector['id_sektor']."\" selected>".$rowSector['nama_sektor']." </option>";
+														} else {
+															echo "<option value=\"".$rowSector['id_sektor']."\">".$rowSector['nama_sektor']." </option>";
+														}
+    											}
+    										?>
                       </select>
                   </div>
                 </div>
@@ -118,7 +142,7 @@
                   <div class="col-lg-12 form-group">
                     <label>Address</label>
                     <div class="input-group">
-                      <input id="address" type="text" class="form-control" name="alamat" placeholder="Jl. Jend. Gatot Subroto no. 160">
+                      <input id="address" type="text" class="form-control" name="alamat" placeholder="Jl. Jend. Gatot Subroto no. 160"  value="<?php echo $data['alamat']; ?>">
                       <div class="input-group-addon">
                         <input id="geocode" type="button" class="fa fa-map-marker" style="font-family: FontAwesome" value="&#xf041;">
                       </div>
@@ -129,42 +153,58 @@
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>District (Kecamatan)</label>
                       <select id="district" class="form-control" name="kecamatan">
-                        <option value="Andir">Andir</option>
-                        <option value="Antapani">Antapani</option>
-                        <option value="Arcamanik">Arcamanik</option>
-                        <option value="Astanaanyar">Astanaanyar</option>
-                        <option value="Babakanciparay">Babakanciparay</option>
-                        <option value="Bandung Kidul">Bandung Kidul</option>
-                        <option value="Buahbatu">Buahbatu</option>
+                        <?php
+													$id_kelurahan = $data['id_kelurahan'];
+													$sqlD = "select * from kelurahan where id_kelurahan = '$id_kelurahan'";
+													$resD = $link->query($sqlD);
+													if (mysqli_num_rows($resD) == 1) {
+														$rowD = mysqli_fetch_array($resD);
+														$rowD['id_kecamatan'];
+													}
+
+    											$sqlDist = "select * from kecamatan order by nama_kecamatan";
+    											$resDist = $link->query($sqlDist);
+    											while ($rowDist = mysqli_fetch_array($resDist)) {
+														if ($rowDist['id_kecamatan'] == $rowD['id_kecamatan']) {
+    													echo "<option value=\"".$rowDist['id_kecamatan']."\" selected>".$rowDist['nama_kecamatan']." </option>";
+														} else {
+															echo "<option value=\"".$rowDist['id_kecamatan']."\">".$rowDist['nama_kecamatan']." </option>";
+														}
+    											}
+    										?>
                       </select>
                   </div>
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Village (Kelurahan)</label>
                       <select id="village" class="form-control" name="kelurahan">
-                        <option value="Campaka">Campaka</option>
-                        <option value="Ciroyom">Ciroyom</option>
-                        <option value="Dunguscariang">Dunguscariang</option>
-                        <option value="Garuda">Garuda</option>
-                        <option value="Kebonjeruk">Kebonjeruk</option>
-                        <option value="Maleber">Maleber</option>
-                        <option value="Jatisari">Jatisari</option>
+                        <?php
+    											$sqlVil = "select * from kelurahan order by nama_kelurahan";
+    											$resVil = $link->query($sqlVil);
+    											while ($rowVil = mysqli_fetch_array($resVil)) {
+														if ($rowVil['id_kelurahan'] == $data['id_kelurahan']) {
+    													echo "<option value=\"".$rowVil['id_kelurahan']."\" selected>".$rowVil['nama_kelurahan']." </option>";
+														} else {
+															echo "<option value=\"".$rowVil['id_kelurahan']."\">".$rowVil['nama_kelurahan']." </option>";
+														}
+    											}
+    										?>
                       </select>
                   </div>
                 </div>
                 <div class="row form-group">
                   <div class="col-lg-12 form-group">
                       <label for="inputUsername">Phone Number</label>
-                      <input type="text" class="form-control" name="telepon" placeholder="(022) 7313333">
+                      <input type="text" class="form-control" name="telepon" placeholder="(022) 7313333" value="<?php echo $data['telepon']; ?>">
                   </div>
                 </div>
                 <div class="row form-group">
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Latitude</label>
-                      <input id="lat" type="text" class="form-control" name="lat" placeholder="-6.925961">
+                      <input id="lat" type="text" class="form-control" name="lat" placeholder="-6.925961" value="<?php echo $data['latitude']; ?>">
                   </div>
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Longitude</label>
-                      <input id="lng" type="text" class="form-control" name="lng" placeholder="107.632100">
+                      <input id="lng" type="text" class="form-control" name="lng" placeholder="107.632100" value="<?php echo $data['longitude']; ?>">
                   </div>
                 </div>
                 <div class="row form-group">
@@ -172,12 +212,12 @@
                     <div>
                       <label>Business Status</label>
                       <div class="templatemo-block margin-bottom-5">
-                        <input type="radio" name="statusUsaha" value="Actived" checked>
-                        <label class="font-weight-400"><span></span>Actived</label>
+                        <input type="radio" id="r1" name="statusUsaha" value="Aktif" <?php if ($data['status'] == "Aktif") { echo "checked"; } ?>>
+                        <label for="r1" class="font-weight-400"><span></span>Actived</label>
                       </div>
                       <div class="templatemo-block margin-bottom-5">
-                        <input type="radio" name="statusUsaha" value="Deactived">
-                        <label class="font-weight-400"><span></span>Deactived</label>
+                        <input type="radio" id="r2" name="statusUsaha" value="Deaktif" <?php if ($data['status'] == "Deaktif") { echo "checked"; } ?>>
+                        <label for="r2" class="font-weight-400"><span></span>Deactived</label>
                       </div>
                     </div>
                   </div>
@@ -190,10 +230,14 @@
                   </div>
                 </div>
                 <div class="form-group text-right">
-                  <button type="submit" class="templatemo-blue-button">Add</button>
+                  <button type="submit" class="templatemo-blue-button">Save</button>
                   <button type="reset" class="templatemo-white-button">Reset</button>
                 </div>
               </form>
+              <?php
+                }
+								mysqli_close($link);
+              ?>
             </div>
 
             <!-- second widget -->
@@ -226,3 +270,6 @@
     <script type="text/javascript" src="../js/templatemo-script.js"></script>      <!-- Templatemo Script -->
   </body>
 </html>
+<?php } else {
+  header("Location: ../admin/login.php");
+} ?>

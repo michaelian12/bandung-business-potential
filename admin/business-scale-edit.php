@@ -1,3 +1,17 @@
+<?php
+	session_start();
+  if (($_SESSION['adminLogged'] == true) && ($_SESSION['nip'] != "")) {
+    include("../libs/connection.php");
+  	$id_edit = $_GET["id"];
+
+    $link = dbConnect();
+    $sql = "select count(ktp) as total from user where status = 'Deaktif'";
+    $res = $link->query($sql);
+    if (mysqli_num_rows($res) == 1) {
+      $data = mysqli_fetch_array($res);
+    }
+    mysqli_close($link);
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -37,12 +51,12 @@
 
         <nav class="templatemo-left-nav">
           <ul>
-            <li><a href="index.html"><i class="fa fa-users fa-fw"></i>Accounts<span class="badge">5</span></a></li>
-            <li><a href="region.html"><i class="fa fa-map-marker fa-fw" style="color: #e6e6e6;"></i>Region</a></li>
-            <li><a href="business.html"><i class="fa fa-database fa-fw"></i>Business</a></li>
-            <li><a href="business-scale.html" class="active"><i class="fa fa-expand fa-fw"></i>Business Scale</a></li>
-            <li><a href="business-sector.html"><i class="fa fa-flag fa-fw"></i>Business Sector</a></li>
-            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i>Sign Out</a></li>
+            <li><a href="index.php"><i class="fa fa-users fa-fw"></i>Accounts<span class="badge"><?php if ($data['total'] != 0) { echo $data['total']; } ?></span></a></li>
+            <li><a href="region.php"><i class="fa fa-map-marker fa-fw" style="color: #e6e6e6;"></i>Region</a></li>
+            <li><a href="business.php"><i class="fa fa-database fa-fw"></i>Business</a></li>
+            <li><a href="business-scale.php" class="active"><i class="fa fa-expand fa-fw"></i>Business Scale</a></li>
+            <li><a href="business-sector.php"><i class="fa fa-flag fa-fw"></i>Business Sector</a></li>
+            <li><a href="../libs/logout-admin.php"><i class="fa fa-sign-out fa-fw"></i>Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -65,16 +79,27 @@
             <div class="panel panel-default margin-10 col-1">
               <div class="panel-heading"><h2 class="text-uppercase">Edit Business Scale Form</h2></div>
               <div class="panel-body">
-                <form action="#" class="templatemo-login-form">
+                <?php
+                  $link = dbConnect();
+                  $sql = "select * from skala_usaha where id_skala = '$id_edit'";
+                  $res = $link->query($sql);
+                  if (mysqli_num_rows($res) == 1) {
+                    $data = mysqli_fetch_array($res);
+                ?>
+                <form action="../libs/business-scale-edit.php?id=<?php echo $id_edit; ?>" method="post" class="templatemo-login-form">
                   <div class="form-group">
                     <label>Scale</label>
-                    <input type="text" class="form-control" name="skala" placeholder="Scale">
+                    <input type="text" class="form-control" name="namaSkala" placeholder="Scale" value="<?php echo $data['nama_skala']; ?>" required="true">
                   </div>
                   <div class="form-group">
                     <button type="submit" class="templatemo-blue-button">Save</button>
                     <button type="reset" class="templatemo-white-button">Reset</button>
                   </div>
                 </form>
+                <?php
+                  }
+                  mysqli_close($link);
+                ?>
               </div>
             </div>
           </div>
@@ -91,3 +116,6 @@
     <script type="text/javascript" src="../js/templatemo-script.js"></script>      <!-- Templatemo Script -->
   </body>
 </html>
+<?php } else {
+  header("Location: ../admin/login.php");
+} ?>

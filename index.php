@@ -84,24 +84,24 @@
                 <div class="media-body">
                   <h2 class="media-heading text-uppercase">Filter</h2><hr>
                   <h3 class="text-uppercase">Region</h3>
-                  <select id="district" class="form-control" style="margin-top:10px;" onchange="updateVillage()">
+                  <select id="district" name="district" class="form-control" style="margin-top:10px;">
 										<?php
 											$link = dbConnect();
-											$sql = "select * from kecamatan order by nama_kecamatan";
-											$res = $link->query($sql);
-											while ($row = mysqli_fetch_array($res)) {
-												echo "<option value=\"".$row['id_kecamatan']."\">".$row['nama_kecamatan']." </option>";
+											$sqlDis = "select * from kecamatan order by nama_kecamatan";
+											$resDis = $link->query($sqlDis);
+											while ($rowDis = mysqli_fetch_array($resDis)) {
+												echo "<option value=\"".$rowDis['id_kecamatan']."\">".$rowDis['nama_kecamatan']." </option>";
 											}
 											mysqli_close($link);
 										?>
                   </select><br>
-                  <select id="village" class="form-control">
+                  <select id="village" name="village" class="form-control">
 										<?php
 											$link = dbConnect();
-											$sql = "select * from kelurahan order by nama_kelurahan";
-											$res = $link->query($sql);
-											while ($row = mysqli_fetch_array($res)) {
-												echo "<option value=\"".$row['id_kelurahan']."\">".$row['nama_kelurahan']." </option>";
+											$sqlVil = "select * from kelurahan order by nama_kelurahan";
+											$resVil = $link->query($sqlVil);
+											while ($rowVil = mysqli_fetch_array($resVil)) {
+												echo "<option value=\"".$rowVil['id_kelurahan']."\">".$rowVil['nama_kelurahan']." </option>";
 											}
 											mysqli_close($link);
 										?>
@@ -110,10 +110,10 @@
                   <select class="form-control" style="margin-top:10px;">
 										<?php
 											$link = dbConnect();
-											$sql = "select * from sektor_usaha order by nama_sektor";
-											$res = $link->query($sql);
-											while ($row = mysqli_fetch_array($res)) {
-												echo "<option value=\"".$row['nama_sektor']."\">".$row['nama_sektor']." </option>";
+											$sqlSec = "select * from sektor_usaha order by nama_sektor";
+											$resSec = $link->query($sqlSec);
+											while ($rowSec = mysqli_fetch_array($resSec)) {
+												echo "<option value=\"".$rowSec['id_sektor']."\">".$rowSec['nama_sektor']." </option>";
 											}
 											mysqli_close($link);
 										?>
@@ -181,7 +181,27 @@
     </div>
 
     <!-- JS -->
-		<script src="js/ajax.js"></script>																					<!-- AJAX -->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#district').on('change', function() {
+					var id_kecamatan = $(this).val();
+					if (id_kecamatan) {
+						$.ajax({
+							type: 'POST',
+							url: 'libs/village.php',
+							data: 'id=' + id_kecamatan,
+							success: function(html) {
+								$('#village').html(html);
+							}
+						});
+					} else {
+						$('#village').html('<option value="">Select district first</option>');
+					}
+				});
+			});
+		</script>
+
+		<!--<script src="js/ajax.js"></script>																					<!-- AJAX -->
     <script src="js/jquery-1.11.2.min.js"></script>      												<!-- jQuery -->
     <script src="js/jquery-migrate-1.2.1.min.js"></script> 											<!--  jQuery Migrate Plugin -->
     <script type="text/javascript" src="js/templatemo-script.js"></script>      <!-- Templatemo Script -->

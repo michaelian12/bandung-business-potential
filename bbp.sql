@@ -270,11 +270,5 @@ create table admin (
   nip varchar(18) primary key,
   nama varchar(50),
   email varchar(50) unique,
-  password varchar(255),
-  alamat varchar(50),
-  tempat_lahir varchar(25),
-  tanggal_lahir date,
-  foto_ktp varchar(255),
-  foto_user varchar(255),
-  jabatan enum('Admin','Member')
+  password varchar(255)
 ) engine = innodb;

@@ -184,13 +184,13 @@
                 <div class="row form-group">
                   <div class="col-lg-12 form-group">
                       <label for="inputUsername">Phone Number</label>
-                      <input type="text" class="form-control" name="telepon" placeholder="(022) 7313333"  value="<?php echo $data['telepon']; ?>">
+                      <input type="text" class="form-control" name="telepon" placeholder="(022) 7313333" value="<?php echo $data['telepon']; ?>">
                   </div>
                 </div>
                 <div class="row form-group">
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Latitude</label>
-                      <input id="lat" type="text" class="form-control" name="lat" placeholder="-6.925961"  value="<?php echo $data['latitude']; ?>">
+                      <input id="lat" type="text" class="form-control" name="lat" placeholder="-6.925961" value="<?php echo $data['latitude']; ?>">
                   </div>
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Longitude</label>
