@@ -1,4 +1,5 @@
 <?php
+	error_reporting(0);
 	session_start();
 	if (($_SESSION['alreadyLogged'] == true) && ($_SESSION['ktp_user'] != "")) {
 		header("Location: index.php");

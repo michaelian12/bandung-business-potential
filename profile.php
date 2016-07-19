@@ -88,7 +88,7 @@
                 <div class="media-body">
                   <h2 class="media-heading text-uppercase blue-text"><?php echo $data['nama']; ?></h2>
                   <p>
-                    <?php if ($data['status'] == "aktif") { ?>
+                    <?php if ($data['status'] == "Aktif") { ?>
                     <i class="fa fa-circle" style="color:green;padding-right:8px;"></i>Active
                     <?php } else { ?>
                     <i class="fa fa-circle" style="color:red;padding-right:8px;"></i>Deactive

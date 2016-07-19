@@ -2,6 +2,43 @@ var map;
 // Create a new blank array for all the listing markers.
 var markers = [];
 
+function initLocations() {
+  var locations = [];
+
+  downloadUrl("../libs/phpsqlajax_genxml.php", function(data) {
+    var xml = data.responseXML;
+    var markers = xml.documentElement.getElementsByTagName("marker");
+    for (var i = 0; i < markers.length; i++) {
+      var name = markers[i].getAttribute("name");
+      var lat = markers[i].getAttribute("lat");
+      var lng = markers[i].getAttribute("lng");
+
+      locations.push({title: name, location: {lat: lat, lng: lng}});
+    }
+  });
+
+  window.alert(locations[0].title);
+  return locations;
+}
+
+function downloadUrl(url, callback) {
+  var request = window.ActiveXObject ?
+      new ActiveXObject('Microsoft.XMLHTTP') :
+      new XMLHttpRequest;
+
+  request.onreadystatechange = function() {
+    if (request.readyState == 4) {
+      request.onreadystatechange = doNothing;
+      callback(request, request.status);
+    }
+  };
+
+  request.open('GET', url, true);
+  request.send(null);
+}
+
+function doNothing() {}
+
 function initMap() {
   // Constructor creates a new map - only center and zoom are required.
   map = new google.maps.Map(document.getElementById('map'), {
@@ -13,13 +50,12 @@ function initMap() {
   // These are the real estate listings that will be shown to the user.
   // Normally we'd have these in a database instead.
   var locations = [
-    {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}},
-    {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}},
-    {title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}},
-    {title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}},
-    {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}},
-    {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
+    {title: 'McDonalds', address: 'Jl. Jendral Gatot Subroto No.160', location: {lat: -6.927696500000001, lng: 107.63565970000002}},
+    {title: 'Sari Raso', address: 'Jl. Dipatiukur No.96', location: {lat: -6.8858572173628305, lng: 107.61478006839752}}
   ];
+
+  /*var locations = [];
+  locations = initLocations;*/
 
   var infowindow = new google.maps.InfoWindow();
 
@@ -28,10 +64,12 @@ function initMap() {
     // Get the position from the location array.
     var position = locations[i].location;
     var title = locations[i].title;
+    var address = locations[i].address;
     // Create a marker per location, and put into markers array.
     var marker = new google.maps.Marker({
       position: position,
       title: title,
+      address: address,
       animation: google.maps.Animation.DROP,
       id: i
     });
@@ -77,7 +115,7 @@ function populateInfoWindow(marker, infowindow) {
       if (status == google.maps.StreetViewStatus.OK) {
         var nearStreetViewLocation = data.location.latLng;
         var heading = google.maps.geometry.spherical.computeHeading(nearStreetViewLocation, marker.position);
-        infowindow.setContent('<div>' + marker.title + '</div><div>' + marker.position + '</div>');
+        infowindow.setContent('<div>' + marker.title + '</div><div>' + marker.address + '</div><div>coordinates: ' + marker.getPosition().toUrlValue(6) + '</div>');
         var panoramaOptions = {
           position: nearStreetViewLocation,
           pov: {
@@ -87,7 +125,7 @@ function populateInfoWindow(marker, infowindow) {
         };
         var panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'), panoramaOptions);
       } else {
-        infowindow.setContent('<div>' + marker.title + '</div><div>' + marker.position + '</div><div>No Street View Found</div>');
+        infowindow.setContent('<div>' + marker.title + '</div><div>' + marker.address + '</div><div>coordinates: ' + marker.getPosition().toUrlValue(6) + '</div><div>No Street View Found</div>');
       }
     }
 

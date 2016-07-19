@@ -1,10 +1,10 @@
 <?php
 	// database connection function
 	function dbConnect(){
-		$host = "localhost";
-		$user = "root";
-		$password = "";
-		$database = "bbp";
+		$host = "ap-cdbr-azure-southeast-b.cloudapp.net";
+		$user = "be443468b851a3";
+		$password = "fd796b50";
+		$database = "bandungbusinesspotential";
 
 		$link = mysqli_connect($host, $user, $password, $database);
 		if ($link->connect_error) {
