@@ -89,7 +89,7 @@ function geocodeLatLng(geocoder, marker, position) {
         // set value in form
         document.getElementById('lat').value = marker.getPosition().lat();
         document.getElementById('lng').value = marker.getPosition().lng();
-        var str = marker.title.split(',',1);
+        var str = results[0].formatted_address.split(',',1);
         document.getElementById('address').value = str;
       } else {
         window.alert('No results found');

@@ -2,43 +2,6 @@ var map;
 // Create a new blank array for all the listing markers.
 var markers = [];
 
-function initLocations() {
-  var locations = [];
-
-  downloadUrl("../libs/phpsqlajax_genxml.php", function(data) {
-    var xml = data.responseXML;
-    var markers = xml.documentElement.getElementsByTagName("marker");
-    for (var i = 0; i < markers.length; i++) {
-      var name = markers[i].getAttribute("name");
-      var lat = markers[i].getAttribute("lat");
-      var lng = markers[i].getAttribute("lng");
-
-      locations.push({title: name, location: {lat: lat, lng: lng}});
-    }
-  });
-
-  window.alert(locations[0].title);
-  return locations;
-}
-
-function downloadUrl(url, callback) {
-  var request = window.ActiveXObject ?
-      new ActiveXObject('Microsoft.XMLHTTP') :
-      new XMLHttpRequest;
-
-  request.onreadystatechange = function() {
-    if (request.readyState == 4) {
-      request.onreadystatechange = doNothing;
-      callback(request, request.status);
-    }
-  };
-
-  request.open('GET', url, true);
-  request.send(null);
-}
-
-function doNothing() {}
-
 function initMap() {
   // Constructor creates a new map - only center and zoom are required.
   map = new google.maps.Map(document.getElementById('map'), {
@@ -49,42 +12,54 @@ function initMap() {
 
   // These are the real estate listings that will be shown to the user.
   // Normally we'd have these in a database instead.
-  var locations = [
-    {title: 'McDonalds', address: 'Jl. Jendral Gatot Subroto No.160', location: {lat: -6.927696500000001, lng: 107.63565970000002}},
-    {title: 'Sari Raso', address: 'Jl. Dipatiukur No.96', location: {lat: -6.8858572173628305, lng: 107.61478006839752}}
-  ];
+  //var locations = initLocations();
+  var locations = [];
 
-  /*var locations = [];
-  locations = initLocations;*/
+  // Change this depending on the name of your PHP file
+  downloadUrl("libs/phpsqlajax_genxml.php", function(data) {
+    var xml = data.responseXML;
+    var business = xml.documentElement.getElementsByTagName("marker");
+    for (var i = 0; i < business.length; i++) {
+      var name = business[i].getAttribute("name");
+      var address = business[i].getAttribute("address");
+      //var type = business[i].getAttribute("type");
+      var lat = parseFloat(business[i].getAttribute("lat"));
+      var lng = parseFloat(business[i].getAttribute("lng"));
 
-  var infowindow = new google.maps.InfoWindow();
+      var loc = {title: name, address: address, location: {lat: lat, lng: lng}};
+      locations.push(loc);
+    }
 
-  // The following group uses the location array to create an array of markers on initialize.
-  for (var i = 0; i < locations.length; i++) {
-    // Get the position from the location array.
-    var position = locations[i].location;
-    var title = locations[i].title;
-    var address = locations[i].address;
-    // Create a marker per location, and put into markers array.
-    var marker = new google.maps.Marker({
-      position: position,
-      title: title,
-      address: address,
-      animation: google.maps.Animation.DROP,
-      id: i
+    var infowindow = new google.maps.InfoWindow();
+
+    // The following group uses the location array to create an array of markers on initialize.
+    for (var i = 0; i < locations.length; i++) {
+      // Get the position from the location array.
+      var position = locations[i].location;
+      var title = locations[i].title;
+      var address = locations[i].address;
+      // Create a marker per location, and put into markers array.
+      var marker = new google.maps.Marker({
+        position: position,
+        title: title,
+        address: address,
+        animation: google.maps.Animation.DROP,
+        id: i
+      });
+
+      // Push the marker to our array of markers.
+      markers.push(marker);
+
+      // Create an onclick event to open an infowindow at each marker.
+      marker.addListener('click', function() {
+        populateInfoWindow(this, infowindow);
+      });
+    }
+
+    map.addListener('click', function() {
+      infowindow.marker = null;
+      infowindow.close()
     });
-
-    // Push the marker to our array of markers.
-    markers.push(marker);
-
-    // Create an onclick event to open an infowindow at each marker.
-    marker.addListener('click', function() {
-      populateInfoWindow(this, infowindow);
-    });
-  }
-
-  map.addListener('click', function() {
-    infowindow.close()
   });
 
   document.getElementById('show-listings').addEventListener('click', showListings);
@@ -154,3 +129,21 @@ function hideListings() {
     markers[i].setMap(null);
   }
 }
+
+function downloadUrl(url, callback) {
+  var request = window.ActiveXObject ?
+      new ActiveXObject('Microsoft.XMLHTTP') :
+      new XMLHttpRequest;
+
+  request.onreadystatechange = function() {
+    if (request.readyState == 4) {
+      request.onreadystatechange = doNothing();
+      callback(request, request.status);
+    }
+  };
+
+  request.open('GET', url, true);
+  request.send(null);
+}
+
+function doNothing() {}
