@@ -151,21 +151,22 @@
                 </div>
                 <div class="row form-group">
                   <div class="col-lg-6 col-md-6 form-group">
-                      <label>District (Kecamatan)</label>
-                      <select id="district" class="form-control" name="kecamatan" required="true">
+                      <label>District</label>
+                      <select id="district" class="form-control" name="kecamatan" required="true" onchange="setVillage(this.value)">
+												<option value="" disabled="true">Select District (Kecamatan)</option>
                         <?php
 													$id_kelurahan = $data['id_kelurahan'];
 													$sqlD = "select * from kelurahan where id_kelurahan = '$id_kelurahan'";
 													$resD = $link->query($sqlD);
 													if (mysqli_num_rows($resD) == 1) {
 														$rowD = mysqli_fetch_array($resD);
-														$rowD['id_kecamatan'];
+														$id_kecamatan = $rowD['id_kecamatan'];
 													}
 
     											$sqlDist = "select * from kecamatan order by nama_kecamatan";
     											$resDist = $link->query($sqlDist);
     											while ($rowDist = mysqli_fetch_array($resDist)) {
-														if ($rowDist['id_kecamatan'] == $rowD['id_kecamatan']) {
+														if ($rowDist['id_kecamatan'] == $id_kecamatan) {
     													echo "<option value=\"".$rowDist['id_kecamatan']."\" selected>".$rowDist['nama_kecamatan']." </option>";
 														} else {
 															echo "<option value=\"".$rowDist['id_kecamatan']."\">".$rowDist['nama_kecamatan']." </option>";
@@ -175,10 +176,11 @@
                       </select>
                   </div>
                   <div class="col-lg-6 col-md-6 form-group">
-                      <label>Village (Kelurahan)</label>
+                      <label>Village</label>
                       <select id="village" class="form-control" name="kelurahan" required="true">
+												<option value="" disabled="true">Select Village (Kelurahan)</option>
                         <?php
-    											$sqlVil = "select * from kelurahan order by nama_kelurahan";
+    											$sqlVil = "select * from kelurahan where id_kecamatan = '$id_kecamatan' order by nama_kelurahan";
     											$resVil = $link->query($sqlVil);
     											while ($rowVil = mysqli_fetch_array($resVil)) {
 														if ($rowVil['id_kelurahan'] == $data['id_kelurahan']) {
@@ -255,10 +257,21 @@
     </div>
 
     <!-- JS -->
-    <script>
+    <script type="text/javascript">
       function goBack() {
         window.history.back();
       }
+
+			function setVillage(val) {
+				$.ajax({
+				type: "POST",
+				url: "../libs/village.php",
+				data: 'id='+val,
+				success: function(data){
+					$("#village").html(data);
+				}
+				});
+			};
     </script>
     <script type="text/javascript" src="../js/jquery-1.11.2.min.js"></script>      <!-- jQuery -->
     <script type="text/javascript" src="../js/bootstrap-filestyle.min.js"></script>  <!-- http://markusslima.github.io/bootstrap-filestyle/ -->

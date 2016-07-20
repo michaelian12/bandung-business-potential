@@ -26,6 +26,7 @@
     <script type="text/javascript" src="js/maps.api.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvXxoC8wGKiCUSY-FZTENW0z6P2fRrikg&libraries=geometry&v=3&callback=initMap">
     </script>
+
     <link rel="shortcut icon" href="images/logo-bdg.png">
   </head>
   <body>
@@ -69,8 +70,8 @@
             <!-- Search box -->
             <form class="templatemo-search-form" role="search">
               <div class="input-group">
-                  <button type="submit" class="fa fa-search"></button>
-                  <input type="text" class="form-control" placeholder="Search Business Name" name="srch-term" id="srch-term">
+                <button type="submit" class="fa fa-search"></button>
+                <input type="text" class="form-control" placeholder="Search Business Name" name="srch-term" id="srch-term">
               </div>
             </form>
           </div>
@@ -84,43 +85,39 @@
               <div class="media">
                 <div class="media-body">
                   <h2 class="media-heading text-uppercase">Filter</h2><hr>
-                  <h3 class="text-uppercase">Region</h3>
-                  <select id="district" name="district" class="form-control" style="margin-top:10px;">
-										<?php
-											$link = dbConnect();
-											$sqlDis = "select * from kecamatan order by nama_kecamatan";
-											$resDis = $link->query($sqlDis);
-											while ($rowDis = mysqli_fetch_array($resDis)) {
-												echo "<option value=\"".$rowDis['id_kecamatan']."\">".$rowDis['nama_kecamatan']." </option>";
-											}
-											mysqli_close($link);
-										?>
-                  </select><br>
-                  <select id="village" name="village" class="form-control">
-										<?php
-											$link = dbConnect();
-											$sqlVil = "select * from kelurahan order by nama_kelurahan";
-											$resVil = $link->query($sqlVil);
-											while ($rowVil = mysqli_fetch_array($resVil)) {
-												echo "<option value=\"".$rowVil['id_kelurahan']."\">".$rowVil['nama_kelurahan']." </option>";
-											}
-											mysqli_close($link);
-										?>
-                  </select><br>
-                  <h3 class="text-uppercase">Business Sector</h3>
-                  <select class="form-control" style="margin-top:10px;">
-										<?php
-											$link = dbConnect();
-											$sqlSec = "select * from sektor_usaha order by nama_sektor";
-											$resSec = $link->query($sqlSec);
-											while ($rowSec = mysqli_fetch_array($resSec)) {
-												echo "<option value=\"".$rowSec['id_sektor']."\">".$rowSec['nama_sektor']." </option>";
-											}
-											mysqli_close($link);
-										?>
-                  </select><br>
-                  <input id="show-listings" type="button" class="templatemo-green-button" value="Show Listings">
-                  <input id="hide-listings" type="button" class="templatemo-black-button" value="Hide Listings"><br>
+									<form action="libs/business-add.php" class="templatemo-login-form" method="post" enctype="multipart/form-data">
+										<h3 class="text-uppercase">Region</h3>
+										<select id="district" name="kecamatan" class="form-control" style="margin-top:10px;" onchange="setVillage(this.value)">
+											<option value="" disabled="true" selected="true">Select District (Kecamatan)</option>
+											<?php
+												$link = dbConnect();
+												$sqlDis = "select * from kecamatan";
+												$resDis = $link->query($sqlDis);
+												while ($rowDis = mysqli_fetch_array($resDis)) {
+													echo "<option value=\"".$rowDis['id_kecamatan']."\">".$rowDis['nama_kecamatan']." </option>";
+												}
+												mysqli_close($link);
+											?>
+										</select><br>
+		                <select id="village" name="kelurahan" class="form-control">
+											<option value="" disabled="true" selected="true">Select Village (Kelurahan)</option>
+
+		                </select><br>
+										<h3 class="text-uppercase">Business Sector</h3>
+	                  <select class="form-control" style="margin-top:10px;">
+											<?php
+												$link = dbConnect();
+												$sqlSec = "select * from sektor_usaha order by nama_sektor";
+												$resSec = $link->query($sqlSec);
+												while ($rowSec = mysqli_fetch_array($resSec)) {
+													echo "<option value=\"".$rowSec['id_sektor']."\">".$rowSec['nama_sektor']." </option>";
+												}
+												mysqli_close($link);
+											?>
+	                  </select><br>
+	                  <input id="show-listings" type="button" class="templatemo-green-button" value="Show Listings">
+	                  <input id="hide-listings" type="button" class="templatemo-black-button" value="Hide Listings"><br>
+									</form>
                 </div>
               </div>
             </div>
@@ -183,26 +180,17 @@
 
     <!-- JS -->
 		<script type="text/javascript">
-			$(document).ready(function() {
-				$('#district').on('change', function() {
-					var id_kecamatan = $(this).val();
-					if (id_kecamatan) {
-						$.ajax({
-							type: 'POST',
-							url: 'libs/village.php',
-							data: 'id=' + id_kecamatan,
-							success: function(html) {
-								$('#village').html(html);
-							}
-						});
-					} else {
-						$('#village').html('<option value="">Select district first</option>');
-					}
+			function setVillage(val) {
+				$.ajax({
+				type: "POST",
+				url: "libs/village.php",
+				data: 'id='+val,
+				success: function(data){
+					$("#village").html(data);
+				}
 				});
-			});
+			};
 		</script>
-
-		<!--<script src="js/ajax.js"></script>																					<!-- AJAX -->
     <script src="js/jquery-1.11.2.min.js"></script>      												<!-- jQuery -->
     <script src="js/jquery-migrate-1.2.1.min.js"></script> 											<!--  jQuery Migrate Plugin -->
     <script type="text/javascript" src="js/templatemo-script.js"></script>      <!-- Templatemo Script -->

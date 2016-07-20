@@ -131,9 +131,9 @@
                 </div>
                 <div class="row form-group">
                   <div class="col-lg-6 col-md-6 form-group">
-                      <label>District (Kecamatan)</label>
-                      <select id="district" class="form-control" name="kecamatan" required="true">
-												<option value="" disabled="true" selected="true">Select District</option>
+                      <label>District</label>
+                      <select id="district" class="form-control" name="kecamatan" required="true" onchange="setVillage(this.value)">
+												<option value="" disabled="true" selected="true">Select District (Kecamatan)</option>
                         <?php
     											$link = dbConnect();
     											$sql = "select * from kecamatan order by nama_kecamatan";
@@ -146,18 +146,10 @@
                       </select>
                   </div>
                   <div class="col-lg-6 col-md-6 form-group">
-                      <label>Village (Kelurahan)</label>
+                      <label>Village</label>
                       <select id="village" class="form-control" name="kelurahan" required="true">
-												<option value="" disabled="true" selected="true">Select Village</option>
-                        <?php
-    											$link = dbConnect();
-    											$sql = "select * from kelurahan order by nama_kelurahan";
-    											$res = $link->query($sql);
-    											while ($row = mysqli_fetch_array($res)) {
-    												echo "<option value=\"".$row['id_kelurahan']."\">".$row['nama_kelurahan']." </option>";
-    											}
-    											mysqli_close($link);
-    										?>
+												<option value="" disabled="true" selected="true">Select Village (Kelurahan)</option>
+
                       </select>
                   </div>
                 </div>
@@ -221,6 +213,18 @@
     </div>
 
     <!-- JS -->
+		<script type="text/javascript">
+			function setVillage(val) {
+				$.ajax({
+				type: "POST",
+				url: "libs/village.php",
+				data: 'id='+val,
+				success: function(data){
+					$("#village").html(data);
+				}
+				});
+			};
+		</script>
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>      	<!-- jQuery -->
     <script type="text/javascript" src="js/bootstrap-filestyle.min.js"></script>  <!-- http://markusslima.github.io/bootstrap-filestyle/ -->
     <script type="text/javascript" src="js/templatemo-script.js"></script>      	<!-- Templatemo Script -->
