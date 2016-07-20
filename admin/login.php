@@ -1,6 +1,7 @@
 <?php
+	error_reporting(0);
 	session_start();
-	if (($_SESSION['alreadyLogged'] == true) && ($_SESSION['nip'] != "")) {
+	if (($_SESSION['adminLogged'] == true) && ($_SESSION['nip'] != "")) {
 		header("Location: index.php");
 	} else {
 ?>
@@ -19,7 +20,7 @@
 	  <link href="../css/templatemo-style.css" rel="stylesheet">
 
 	  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	  !-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	  <!--[if lt IE 9]>
 	    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 	    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -38,13 +39,13 @@
 	    	<div class="form-group">
 	    		<div class="input-group">
 		    		<div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
-		        <input type="text" class="form-control" name="nip" placeholder="Employee ID Number">
+		        <input type="text" class="form-control" name="nip" placeholder="Employee ID Number" required="true">
 		      </div>
 	    	</div>
 	    	<div class="form-group">
 	    		<div class="input-group">
 		    		<div class="input-group-addon"><i class="fa fa-key fa-fw"></i></div>
-		      	<input type="password" class="form-control" name="password" placeholder="******">
+		      	<input type="password" class="form-control" name="password" placeholder="******" required="true">
 		    	</div>
 	    	</div>
 				<p style="float: right;"><strong><a href="#" class="blue-text">Forgot password?</a></strong></p>
@@ -52,9 +53,6 @@
 					<button type="submit" class="templatemo-blue-button width-100">Login</button>
 				</div>
 	    </form>
-		</div>
-		<div class="templatemo-content-widget templatemo-login-widget templatemo-register-widget white-bg">
-			<p>Not a registered user yet? <strong><a href="#" class="blue-text">Sign up now!</a></strong></p>
 		</div>
 	</body>
 </html>

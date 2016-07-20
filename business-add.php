@@ -77,19 +77,20 @@
                 <div class="row form-group">
                   <div class="col-lg-12 form-group">
                     <label>Business Name</label>
-                    <input type="text" class="form-control" name="namaUsaha" placeholder="McDonald's">
+                    <input type="text" class="form-control" name="namaUsaha" placeholder="McDonald's" required="true">
                   </div>
                 </div>
                 <div class="row form-group">
                   <div class="col-lg-12 form-group">
                     <label>Main Product</label>
-                    <input type="text" class="form-control" name="produkUtama" placeholder="Foods & Drinks">
+                    <input type="text" class="form-control" name="produkUtama" placeholder="Foods & Drinks" required="true">
                   </div>
                 </div>
                 <div class="row form-group">
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Business Scale</label>
-                      <select class="form-control" name="skalaUsaha">
+                      <select class="form-control" name="skalaUsaha" required="true">
+												<option value="" disabled="true" selected="true">Select Scale</option>
                         <?php
     											$link = dbConnect();
     											$sql = "select * from skala_usaha";
@@ -103,7 +104,8 @@
                   </div>
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Business Sector</label>
-                      <select class="form-control" name="sektorUsaha">
+                      <select class="form-control" name="sektorUsaha" required="true">
+												<option value="" disabled="true" selected="true">Select Sector</option>
                         <?php
     											$link = dbConnect();
     											$sql = "select * from sektor_usaha order by nama_sektor";
@@ -120,7 +122,7 @@
                   <div class="col-lg-12 form-group">
                     <label>Address</label>
                     <div class="input-group">
-                      <input id="address" type="text" class="form-control" name="alamat" placeholder="Jl. Jend. Gatot Subroto no. 160">
+                      <input id="address" type="text" class="form-control" name="alamat" placeholder="Jl. Jend. Gatot Subroto no. 160" required="true">
                       <div class="input-group-addon">
                         <input id="geocode" type="button" class="fa fa-map-marker" style="font-family: FontAwesome" value="&#xf041;">
                       </div>
@@ -130,7 +132,8 @@
                 <div class="row form-group">
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>District (Kecamatan)</label>
-                      <select id="district" class="form-control" name="kecamatan">
+                      <select id="district" class="form-control" name="kecamatan" required="true">
+												<option value="" disabled="true" selected="true">Select District</option>
                         <?php
     											$link = dbConnect();
     											$sql = "select * from kecamatan order by nama_kecamatan";
@@ -144,7 +147,8 @@
                   </div>
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Village (Kelurahan)</label>
-                      <select id="village" class="form-control" name="kelurahan">
+                      <select id="village" class="form-control" name="kelurahan" required="true">
+												<option value="" disabled="true" selected="true">Select Village</option>
                         <?php
     											$link = dbConnect();
     											$sql = "select * from kelurahan order by nama_kelurahan";
@@ -160,17 +164,17 @@
                 <div class="row form-group">
                   <div class="col-lg-12 form-group">
                       <label for="inputUsername">Phone Number</label>
-                      <input type="text" class="form-control" name="telepon" placeholder="(022) 7313333">
+                      <input type="text" class="form-control" name="telepon" placeholder="(022) 7313333" required="true">
                   </div>
                 </div>
                 <div class="row form-group">
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Latitude</label>
-                      <input id="lat" type="text" class="form-control" name="lat" placeholder="-6.925961">
+                      <input id="lat" type="text" class="form-control" name="lat" placeholder="-6.925961" required="true">
                   </div>
                   <div class="col-lg-6 col-md-6 form-group">
                       <label>Longitude</label>
-                      <input id="lng" type="text" class="form-control" name="lng" placeholder="107.632100">
+                      <input id="lng" type="text" class="form-control" name="lng" placeholder="107.632100" required="true">
                   </div>
                 </div>
                 <div class="row form-group">
@@ -192,7 +196,7 @@
                   <div class="col-lg-12 form-group">
                     <label class="control-label templatemo-block">Business Image Files</label>
                     <input type="file" id="gambarUsaha" class="filestyle" name="gambarUsaha" data-buttonName="btn-primary" data-buttonBefore="true" data-icon="false">
-                    <p>Maximum upload size is 5 MB.</p>
+                    <p>Maximum upload size is 2 MB.</p>
                   </div>
                 </div>
                 <div class="form-group text-right">
@@ -217,16 +221,6 @@
     </div>
 
     <!-- JS -->
-    <script>
-      $(function(){
-        $("input[type='submit']").click(function(){
-            var $fileUpload = $("input[type='file']");
-            if (parseInt($fileUpload.get(0).files.length)>2){
-             alert("You can only upload a maximum of 2 files");
-            }
-        });
-      });​
-    </script>
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>      	<!-- jQuery -->
     <script type="text/javascript" src="js/bootstrap-filestyle.min.js"></script>  <!-- http://markusslima.github.io/bootstrap-filestyle/ -->
     <script type="text/javascript" src="js/templatemo-script.js"></script>      	<!-- Templatemo Script -->

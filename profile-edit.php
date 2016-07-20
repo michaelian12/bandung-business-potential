@@ -79,7 +79,7 @@
                     </a>
                   </div></center>
                   <label>Change Profile Picture</label>
-                  <input id="gambarProfil" type="file" class="filestyle" name="gambarProfil" data-buttonName="btn-primary" data-buttonBefore="true" data-icon="false">
+                  <input id="gambarUser" type="file" class="filestyle" name="gambarUser" data-buttonName="btn-primary" data-buttonBefore="true" data-icon="false">
                 </div>
                 <div class="col-lg-6 col-md-6 form-group">
                   <center><div class="media-left" style="padding: 0px 0px 10px 0px;">
@@ -94,42 +94,42 @@
               <div class="row form-group">
                 <div class="col-lg-6 col-md-6 form-group">
                   <label>Full Name</label>
-                  <input type="text" class="form-control" name="nama" placeholder="John Smith" value="<?php echo $data['nama']; ?>">
+                  <input type="text" class="form-control" name="nama" placeholder="John Smith" value="<?php echo $data['nama']; ?>" required="true">
                 </div>
                 <div class="col-lg-6 col-md-6 form-group">
                   <label>Identity Card Number</label>
-                  <input type="text" class="form-control" name="noKtp" placeholder="3273120908950005" value="<?php echo $data['ktp']; ?>" disabled="true">
+                  <input type="text" class="form-control" name="noKtp" placeholder="3273120908950005" value="<?php echo $data['ktp']; ?>" disabled="true" required="true">
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-lg-12 form-group">
                   <label>Address</label>
-                  <input type="text" class="form-control" name="alamat" placeholder="Jl. Kawaluyaan Indah XVII no. 24" value="<?php echo $data['alamat']; ?>">
+                  <input type="text" class="form-control" name="alamat" placeholder="Jl. Kawaluyaan Indah XVII no. 24" value="<?php echo $data['alamat']; ?>" required="true">
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-lg-6 col-md-6 form-group">
                   <label>Email</label>
-                  <input type="email" class="form-control" name="email" placeholder="someone@email.com" value="<?php echo $data['email']; ?>">
+                  <input type="email" class="form-control" name="email" placeholder="someone@email.com" value="<?php echo $data['email']; ?>" required="true">
                 </div>
                 <div class="col-lg-6 col-md-6 form-group">
                   <label>Password</label>
-                  <input type="password" class="form-control" name="password" placeholder="*********************" value="<?php echo decryptIt($data['password']); ?>">
+                  <input type="password" class="form-control" name="password" placeholder="*********************" value="<?php echo decryptIt($data['password']); ?>" required="true">
                 </div>
               </div>
               <div class="row form-group">
                 <div class="col-lg-6 col-md-6 form-group">
                   <label>Birth Place</label>
-                  <input type="text" class="form-control" name="tempatLahir" placeholder="Bandung" value="<?php echo $data['tempat_lahir']; ?>">
+                  <input type="text" class="form-control" name="tempatLahir" placeholder="Bandung" value="<?php echo $data['tempat_lahir']; ?>" required="true">
                 </div>
                 <div class="col-lg-6 col-md-6 form-group">
                   <label>Birth Date</label>
-                  <input type="date" class="form-control" name="tglLahir" value="<?php echo $data['tanggal_lahir']; ?>">
+                  <input type="date" class="form-control" name="tglLahir" value="<?php echo $data['tanggal_lahir']; ?>" required="true">
                 </div>
               </div>
               <div class="form-group text-right">
                 <button type="submit" class="templatemo-blue-button">Update</button>
-                <button type="reset" class="templatemo-white-button">Reset</button>
+                <button onclick="goBack()" class="templatemo-white-button">Cancel</button>
               </div>
             </form>
             <?php } ?>
@@ -142,6 +142,11 @@
     </div>
 
     <!-- JS -->
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+    </script>
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>      <!-- jQuery -->
     <script type="text/javascript" src="js/bootstrap-filestyle.min.js"></script>  <!-- http://markusslima.github.io/bootstrap-filestyle/ -->
     <script type="text/javascript" src="js/templatemo-script.js"></script>      <!-- Templatemo Script -->

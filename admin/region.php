@@ -149,25 +149,26 @@
                         <form action="../libs/region-add-village.php" method="post" class="templatemo-login-form">
                           <div class="form-group">
                             <label>District Name</label>
-                            <select id="district" name="idKecamatan" class="form-control" style="margin-top:10px;">
-                            <?php
-        											$link = dbConnect();
-        											$sqlDis = "select * from kecamatan order by nama_kecamatan";
-        											$resDis = $link->query($sqlDis);
-        											while ($rowDis = mysqli_fetch_array($resDis)) {
-        												echo "<option value=\"".$rowDis['id_kecamatan']."\">".$rowDis['nama_kecamatan']." </option>";
-        											}
-        											mysqli_close($link);
-        										?>
+                            <select id="district" name="idKecamatan" class="form-control" style="margin-top:10px;" required="true">
+															<option value="" disabled="true" selected="true">Select District</option>
+	                            <?php
+	        											$link = dbConnect();
+	        											$sqlDis = "select * from kecamatan order by nama_kecamatan";
+	        											$resDis = $link->query($sqlDis);
+	        											while ($rowDis = mysqli_fetch_array($resDis)) {
+	        												echo "<option value=\"".$rowDis['id_kecamatan']."\">".$rowDis['nama_kecamatan']." </option>";
+	        											}
+	        											mysqli_close($link);
+	        										?>
                             </select>
                           </div>
                           <div class="form-group">
                             <label>Village Name</label>
-                            <input type="text" class="form-control" name="namaKelurahan" placeholder="Village Name">
+                            <input type="text" class="form-control" name="namaKelurahan" placeholder="Village Name" required="true">
                           </div>
                           <div class="form-group">
                             <label>Postal Code</label>
-                            <input type="text" class="form-control" name="kodePos" placeholder="Postal Code">
+                            <input type="text" class="form-control" name="kodePos" placeholder="Postal Code" required="true">
                           </div>
                           <div class="form-group">
                             <button type="submit" class="templatemo-blue-button">Add</button>

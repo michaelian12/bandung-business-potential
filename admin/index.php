@@ -176,7 +176,24 @@
           <?php
                 }
                 mysqli_close($link);
-              }
+              } else {
+					?>
+					<div class="templatemo-flex-row flex-content-row">
+            <div class="templatemo-content-widget white-bg col-2">
+              <i class="fa fa-times"></i>
+							<div class="street-view" style="height:350px;">
+								<center><p class="text-uppercase">Account details will appear once you choose a name from table</p></center>
+							</div>
+						</div>
+            <div class="templatemo-content-widget white-bg col-1">
+              <i class="fa fa-times"></i>
+							<div class="street-view" style="height:350px;">
+								<center><p class="text-uppercase">Account details will appear once you choose a name from table</p></center>
+							</div>
+            </div>
+          </div>
+					<?php
+							}
           ?>
 
           <footer class="text-right">

@@ -12,11 +12,11 @@
 	$res = $link->query($sql);
 
 	if(!$res){
-		?><script>alert("<?php echo mysqli_error($link);?>");</script><?php
+		mysqli_close($link);
+		?><script>alert("<?php echo mysqli_error($link);?>");history.go(-1);</script><?php
 	} else {
+		mysqli_close($link);
 		?><script>alert("Successfully edit village data.");</script><?php
+		echo '<meta http-equiv="Refresh" content="0; url=../admin/region.php#village">';
 	}
-
-	mysqli_close($link);
-	header("Location: ../admin/region.php#village");
 ?>

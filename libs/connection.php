@@ -6,6 +6,11 @@
 		$password = "fd796b50";
 		$database = "bandungbusinesspotential";
 
+		/*$host = "localhost";
+		$user = "root";
+		$password = "";
+		$database = "bbp";*/
+
 		$link = mysqli_connect($host, $user, $password, $database);
 		if ($link->connect_error) {
 			die("Connection failed: " . $link->connect_error);

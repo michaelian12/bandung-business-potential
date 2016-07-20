@@ -39,13 +39,13 @@
 	    	<div class="form-group">
 	    		<div class="input-group">
 		    		<div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
-		        <input type="text" class="form-control" name="noKtp" placeholder="Identity Card Number">
+		        <input type="text" class="form-control" name="ktp" placeholder="Identity Card Number" required="true">
 		      </div>
 	    	</div>
 	    	<div class="form-group">
 	    		<div class="input-group">
 		    		<div class="input-group-addon"><i class="fa fa-key fa-fw"></i></div>
-		      	<input type="password" class="form-control" name="password" placeholder="******">
+		      	<input type="password" class="form-control" name="password" placeholder="******" required="true">
 		    	</div>
 	    	</div>
 				<p style="float: right;"><strong><a href="#" class="blue-text">Forgot password?</a></strong></p>

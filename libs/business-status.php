@@ -16,11 +16,10 @@
 	$res = $link->query($sql);
 
 	if(!$res){
-		?><script>alert("<?php echo mysqli_error($link);?>");</script><?php
+		mysqli_close($link);
+		?><script>alert("<?php echo mysqli_error($link);?>");history.go(-1);</script><?php
 	} else {
-		?><script>alert("Successfully change business status.");</script><?php
+		mysqli_close($link);
+		?><script>history.go(-1);</script><?php
 	}
-
-	mysqli_close($link);
-	header("Location: ../business.php");
 ?>

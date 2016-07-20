@@ -15,23 +15,11 @@
 	$sql = "update user set status = '$status' where ktp = '$ktp'";
 	$res = $link->query($sql);
 
-	if(!$res){
-		?><script>alert("<?php echo mysqli_error($link);?>");</script><?php
+	if (!$res) {
+		mysqli_close($link);
+		?><script>alert("<?php echo mysqli_error($link);?>");history.go(-1);</script><?php
 	} else {
-		?><script>alert("Successfully change user status.");</script><?php
+		mysqli_close($link);
+		?><script>history.go(-1);</script><?php
 	}
-
-	$sql = "select email from user where ktp = '$ktp'";
-	$res = $link->query($sql);
-	if($res) {
-		$subject = 'Account Activation';
-		$message = 'Your account has been activated, now you login with your email on Bandung Business Potential website.';
-		$headers = 'From: webmaster@bandungbusinesspotential.azurewebsites.net' . "\r\n" .
-	'Reply-To: bandungbusinesspotential.azurewebsites.net' . "\r\n" .
-	'X-Mailer: PHP/' . phpversion();
-		mail($email,$subject,$message,$headers);
-	}
-
-	mysqli_close($link);
-	header("Location: ../admin/index.php");
 ?>

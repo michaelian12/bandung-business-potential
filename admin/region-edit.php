@@ -101,7 +101,7 @@
                         </div>
                         <div class="form-group">
                           <button type="submit" class="templatemo-blue-button">Save</button>
-                          <button type="reset" class="templatemo-white-button">Reset</button>
+                          <button onclick="goBack()" class="templatemo-white-button">Cancel</button>
                         </div>
                       </form>
                       <?php
@@ -153,7 +153,7 @@
                         </div>
                         <div class="form-group">
                           <button type="submit" class="templatemo-blue-button">Save</button>
-                          <button type="reset" class="templatemo-white-button">Reset</button>
+                          <button onclick="goBack()" class="templatemo-white-button">Cancel</button>
                         </div>
                       </form>
                       <?php
@@ -174,6 +174,11 @@
     </div>
 
     <!-- JS -->
+		<script>
+			function goBack() {
+				window.history.back();
+			}
+    </script>
     <script type="text/javascript" src="../js/jquery-1.12.4.min.js"></script>      <!-- jQuery -->
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/templatemo-script.js"></script>      <!-- Templatemo Script -->

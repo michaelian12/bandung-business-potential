@@ -20,16 +20,15 @@
 			$_SESSION['adminLogged'] = true;
 
 		  mysqli_close($link);
-			header("Location: ../admin/index.php");
+			echo '<meta http-equiv="Refresh" content="0; url=../admin/index.php">';
 		} else {
 			// id and password didn't match
 			mysqli_close($link);
-			header("Location: ../admin/login-failed.php");
+			?><script>alert("ID and password did not match.");history.go(-1);</script><?php
 		}
 	} else {
 		// account not found in database
     mysqli_close($link);
-		?><script>alert("Account not found.");</script><?php
-		header("Location: ../admin/login.php");
+		?><script>alert("Account not found.");history.go(-1);</script><?php
 	}
 ?>

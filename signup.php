@@ -45,7 +45,7 @@
 				<div class="form-group">
 					<div class="input-group">
 						<div class="input-group-addon"><i class="fa fa-server fa-fw"></i></div>
-						<input type="text" class="form-control" name="noKtp" placeholder="Identity Card Number" required="true">
+						<input type="text" class="form-control" name="ktp" placeholder="Identity Card Number" required="true">
 					</div>
 				</div>
 				<div class="form-group">
@@ -81,7 +81,7 @@
 				<div class="form-group">
 					<label class="control-label templatemo-block">Identity Card File Image</label>
 					<input id="gambarKtp" type="file" class="filestyle" name="gambarKtp" data-buttonName="btn-primary" data-buttonBefore="true" data-icon="false" required="true">
-					<p>Maximum upload size is 5 MB.</p>
+					<p>Maximum upload size is 2 MB.</p>
 				</div>
 				<div class="form-group">
 					<button type="submit" class="templatemo-blue-button width-100">Sign Up</button><br><br>
